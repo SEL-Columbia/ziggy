@@ -29,6 +29,26 @@ enketo.FormDataController = function (entityRelationshipLoader, formDefinitionLo
         if (typeof data !== 'object') {
             data = JSON.parse(data);
         }
+        params = updateEntityAndParams(params, data);
+        if (enketo.hasValue(formDataRepository.saveFormSubmission(params, data))) {
+            submissionRouter.route(params.instanceId);
+        }
+    };
+    self.createOrUpdateEntity = function (params, data) {
+        if (typeof params !== 'object') {
+            params = JSON.parse(params);
+        }
+        if (typeof data !== 'object') {
+            data = JSON.parse(data);
+        }
+        updateEntityAndParams(params, data);
+    };
+    self.deleteFormSubmission = function (params) {
+        init(params);
+        //dataSource.remove(instanceId);
+    };
+
+    var updateEntityAndParams = function (params, data) {
         init(params);
         if (enketo.hasValue(self.entitiesDef) && self.entitiesDef.length != 0) {
             formModelMapper.mapToEntityAndSave(self.entitiesDef, data);
@@ -37,12 +57,6 @@ enketo.FormDataController = function (entityRelationshipLoader, formDefinitionLo
             })[0];
             params["entityId"] = baseEntityIdField.value;
         }
-        if (enketo.hasValue(formDataRepository.saveFormSubmission(params, data))) {
-            submissionRouter.route(params.instanceId);
-        }
-    };
-    self.deleteFormSubmission = function (params) {
-        init(params);
-        //dataSource.remove(instanceId);
-    };
+        return params;
+    }
 };

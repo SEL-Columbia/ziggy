@@ -70,6 +70,41 @@ describe("Form Data Controller", function () {
         expect(formModelMapper.mapToEntityAndSave).toHaveBeenCalledWith(jasmine.any(Array), formModel);
     });
 
+    it("should create/update entities.", function () {
+        var entityRelationshipJSON = [
+            {
+                "parent": "ec",
+                "child": "mother",
+                "field": "wife",
+                "kind": "one_to_one",
+                "from": "ec.id",
+                "to": "mother.ec_id"
+            }
+        ];
+        var formDefinition = {};
+        var formModel = {form: {
+            bind_type: "ec",
+            fields: [
+                {
+                    name: "id",
+                    source: "ec.id",
+                    value: "ec id 1"
+                }
+            ]
+        }};
+        var params = {};
+        spyOn(entityRelationshipLoader, 'load').andReturn(entityRelationshipJSON);
+        spyOn(formDefinitionLoader, 'load').andReturn(formDefinition);
+        spyOn(formDataRepository, 'saveFormSubmission');
+        spyOn(formModelMapper, 'mapToEntityAndSave');
+
+        formDataController = new enketo.FormDataController(entityRelationshipLoader, formDefinitionLoader, formModelMapper, formDataRepository, submissionRouter);
+        formDataController.createOrUpdateEntity(params, formModel);
+
+        expect(formDataRepository.saveFormSubmission).not.toHaveBeenCalled();
+        expect(formModelMapper.mapToEntityAndSave).toHaveBeenCalledWith(jasmine.any(Array), formModel);
+    });
+
     it("should not try to map and save entities when there is no entity defined.", function () {
         var entityRelationshipJSON = [];
         var formDefinition = {};
