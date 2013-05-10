@@ -92,17 +92,19 @@ describe("Form Data Controller", function () {
                 }
             ]
         }};
-        var params = {};
+        var params = {instanceId: "instance id 1"};
         spyOn(entityRelationshipLoader, 'load').andReturn(entityRelationshipJSON);
         spyOn(formDefinitionLoader, 'load').andReturn(formDefinition);
         spyOn(formDataRepository, 'saveFormSubmission');
         spyOn(formModelMapper, 'mapToEntityAndSave');
+        spyOn(submissionRouter, 'route');
 
         formDataController = new enketo.FormDataController(entityRelationshipLoader, formDefinitionLoader, formModelMapper, formDataRepository, submissionRouter);
         formDataController.createOrUpdateEntity(params, formModel);
 
         expect(formDataRepository.saveFormSubmission).not.toHaveBeenCalled();
         expect(formModelMapper.mapToEntityAndSave).toHaveBeenCalledWith(jasmine.any(Array), formModel);
+        expect(submissionRouter.route).toHaveBeenCalledWith("instance id 1");
     });
 
     it("should not try to map and save entities when there is no entity defined.", function () {
