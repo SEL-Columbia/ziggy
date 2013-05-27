@@ -1,8 +1,10 @@
-if (typeof enketo == "undefined" || !enketo) {
+if (typeof enketo === "undefined" || !enketo) {
     var enketo = {};
 }
 
 enketo.EntityDef = function (type) {
+    "use strict";
+
     var self = this;
 
     var findRelativesWhoAre = function (relationAs) {
@@ -28,7 +30,7 @@ enketo.EntityDef = function (type) {
     self.createInstance = function () {
         var instance = new enketo.EntityDef(self.type);
         self.relations.forEach(function (rel) {
-            instance.relations.push(rel.createInstance())
+            instance.relations.push(rel.createInstance());
         });
         return instance;
     };
@@ -58,6 +60,8 @@ enketo.EntityDef = function (type) {
 };
 
 enketo.RelationDef = function (type, kind, as, from, to) {
+    "use strict";
+
     var self = this;
 
     self.type = type;

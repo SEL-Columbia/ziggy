@@ -1,8 +1,9 @@
-if (typeof enketo == "undefined" || !enketo) {
+if (typeof enketo === "undefined" || !enketo) {
     var enketo = {};
 }
 
 enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) {
+    "use strict";
 
     var findEntityByType = function (entitiesDef, type) {
         for (var index = 0; index < entitiesDef.length; index++) {
@@ -122,7 +123,7 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
             if (!enketo.hasValue(params.entityId)) {
                 formDefinition.form.fields.forEach(function (field) {
                     if (!enketo.hasValue(field.source)) {
-                        field["source"] = formDefinition.form.bind_type + "." + field.name;
+                        field.source = formDefinition.form.bind_type + "." + field.name;
                     }
                 });
                 return formDefinition;
@@ -136,7 +137,7 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
                 if (enketo.hasValue(field.source)) {
                     var pathVariables = field.source.split(".");
                     fieldValue = entityHierarchy;
-                    for (var index in pathVariables) {
+                    for (var index = 0; index < pathVariables.length; index++) {
                         var pathVariable = pathVariables[index];
                         if (enketo.hasValue(fieldValue[pathVariable])) {
                             fieldValue = fieldValue[pathVariable];
@@ -149,7 +150,7 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
                     entity = formDefinition.form.bind_type;
                     fieldName = field.name;
                     fieldValue = entityHierarchy[entity][fieldName];
-                    field["source"] = entity + "." + fieldName;
+                    field.source = entity + "." + fieldName;
                 }
                 if (enketo.hasValue(fieldValue)) {
                     field.value = fieldValue;

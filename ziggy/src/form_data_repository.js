@@ -1,8 +1,12 @@
-if (typeof enketo == "undefined" || !enketo) {
+/*global formDataRepositoryContext*/
+
+if (typeof enketo === "undefined" || !enketo) {
     var enketo = {};
 }
 
 enketo.FormDataRepository = function () {
+    "use strict";
+
     var repository;
     if (typeof formDataRepositoryContext !== "undefined") {
         repository = formDataRepositoryContext;

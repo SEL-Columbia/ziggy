@@ -1,8 +1,10 @@
-if (typeof enketo == "undefined" || !enketo) {
+if (typeof enketo === "undefined" || !enketo) {
     var enketo = {};
 }
 
 enketo.EntityRelationships = function (jsonDefinition) {
+    "use strict";
+
     var findEntityByType = function (entities, type) {
         for (var index = 0; index < entities.length; index++) {
             if (entities[index].type === type) {

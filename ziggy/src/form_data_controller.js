@@ -1,8 +1,10 @@
-if (typeof enketo == "undefined" || !enketo) {
+if (typeof enketo === "undefined" || !enketo) {
     var enketo = {};
 }
 
 enketo.FormDataController = function (entityRelationshipLoader, formDefinitionLoader, formModelMapper, formDataRepository, submissionRouter) {
+    "use strict";
+
     var self = this;
 
     var init = function (params) {
@@ -51,13 +53,13 @@ enketo.FormDataController = function (entityRelationshipLoader, formDefinitionLo
 
     var updateEntityAndParams = function (params, data) {
         init(params);
-        if (enketo.hasValue(self.entitiesDef) && self.entitiesDef.length != 0) {
+        if (enketo.hasValue(self.entitiesDef) && self.entitiesDef.length !== 0) {
             formModelMapper.mapToEntityAndSave(self.entitiesDef, data);
             var baseEntityIdField = data.form.fields.filter(function (field) {
                 return field.source === data.form.bind_type + ".id";
             })[0];
-            params["entityId"] = baseEntityIdField.value;
+            params.entityId = baseEntityIdField.value;
         }
         return params;
-    }
+    };
 };

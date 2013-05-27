@@ -1,8 +1,9 @@
-if (typeof enketo == "undefined" || !enketo) {
+if (typeof enketo === "undefined" || !enketo) {
     var enketo = {};
 }
 
 enketo.SQLQueryBuilder = function (formDataRepository) {
+    "use strict";
     var findEntityByType = function (entities, type) {
         for (var index = 0; index < entities.length; index++) {
             if (entities[index].type === type) {
@@ -18,7 +19,9 @@ enketo.SQLQueryBuilder = function (formDataRepository) {
         var sql = "select * from {0} where {1} = '{2}'".format(contextRelation.type, contextRelation.to, parentInstance[column]);
         var baseInstance = JSON.parse(queryMethod(contextRelation)(sql));
 
-        if (!enketo.hasValue(baseInstance)) return null;
+        if (!enketo.hasValue(baseInstance)) {
+            return null;
+        }
         if (!enketo.hasValue(baseEntity.relations) || baseEntity.relations.length === 0) {
             return baseInstance;
         }
@@ -26,8 +29,9 @@ enketo.SQLQueryBuilder = function (formDataRepository) {
         baseEntity.relations.forEach(function (relation) {
             if (relation.type !== parentType) {
                 var relative = loadEntityObjectAndItsRelatives(entitiesDefn, baseInstance, baseEntity.type, relation);
-                if (enketo.hasValue(relative))
+                if (enketo.hasValue(relative)) {
                     baseInstance[relation.type] = relative;
+                }
             }
         });
         return baseInstance;
