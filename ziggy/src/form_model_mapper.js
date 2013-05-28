@@ -165,9 +165,10 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
                 for (var index = 0; index < path.length; index++) {
                     subEntities = subEntities[path[index]];
                 }
-                if (subEntities.length == 0) {
-                    sub_form.instances = [];
-                }
+                sub_form.instances = [];
+                subEntities.forEach(function (subEntity) {
+                    sub_form.instances.push(subEntity);
+                });
             });
         }
     };
