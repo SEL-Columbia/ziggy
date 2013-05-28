@@ -54,6 +54,12 @@ enketo.EntityDef = function (type) {
         })[0];
     };
 
+    self.getRelationByType = function (type) {
+        return self.relations.filter(function (relation) {
+            return relation.type === type;
+        })[0];
+    };
+
     self.iterateThroughFields = function (mapFunction) {
         return self.fields.forEach(mapFunction);
     };

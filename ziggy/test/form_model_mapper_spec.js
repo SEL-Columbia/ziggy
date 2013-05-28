@@ -2,6 +2,7 @@ describe("Form Model Mapper", function () {
     var formModelMapper;
     var formDataRepository;
     var formDefinition;
+    var subFormDefinition;
     var savedFormInstance;
     var queryBuilder;
     var entitiesDef;
@@ -473,5 +474,165 @@ describe("Form Model Mapper", function () {
         expect(formDataRepository.saveEntity).toHaveBeenCalledWith("ec", expectedECInstance);
         expect(formDataRepository.saveEntity).toHaveBeenCalledWith("mother", expectedMotherInstance);
         expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedChildInstance);
+    });
+
+    describe("Sub form mapper", function () {
+        it("should create empty instances when there are no sub entities", function () {
+            var entityValues = {
+                mother: {
+                    field1: "value1",
+                    child: []
+                }
+            };
+            var params = {
+                "id": "id 1",
+                "formName": "entity-registration",
+                "entityId": "123"
+            };
+            subFormDefinition = {
+                "form": {
+                    "bind_type": "mother",
+                    "default_bind_path": "/Child Entity registration/",
+                    "fields": [
+                        {
+                            "name": "field1"
+                        }
+                    ],
+                    "sub_forms": [
+                        {
+                            "bind_type": "child",
+                            "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
+                            "fields": [
+                                {
+                                    "name": "field2"
+                                },
+                                {
+                                    "name": "field3"
+                                },
+                                {
+                                    "name": "field4"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+            var expectedFormModel = {
+                "form": {
+                    "bind_type": "mother",
+                    "default_bind_path": "/Child Entity registration/",
+                    "fields": [
+                        {
+                            "name": "field1",
+                            "source": "mother.field1",
+                            "value": "value1"
+                        }
+                    ],
+                    "sub_forms": [
+                        {
+                            "bind_type": "child",
+                            "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
+                            "fields": [
+                                {
+                                    "name": "field2"
+                                },
+                                {
+                                    "name": "field3"
+                                },
+                                {
+                                    "name": "field4"
+                                }
+                            ],
+                            "instances": []
+                        }
+                    ]
+
+                }
+            };
+            spyOn(formDataRepository, 'getFormInstanceByFormTypeAndId').andReturn(null);
+            spyOn(queryBuilder, 'loadEntityHierarchy').andReturn(entityValues);
+
+            var formModel = formModelMapper.mapToFormModel(entitiesDef, subFormDefinition, params);
+
+            expect(formModel).toEqual(expectedFormModel);
+            expect(queryBuilder.loadEntityHierarchy).toHaveBeenCalledWith(entitiesDef, "mother", "123");
+        });
+
+//        it("should create instances when there are sub entities", function () {
+//            var entityValues = {
+//                entity: {
+//                    field1: "value1",
+//                    childEntity: [
+//                        {
+//                            field2: "value1.2",
+//                            field3: "value1.3",
+//                            field4: "value1.4"
+//                        },
+//                        {
+//                            field2: "value2.2",
+//                            field3: "value2.3",
+//                            field4: "value2.4"
+//                        }
+//
+//                    ]
+//                }
+//            };
+//            var params = {
+//                "id": "id 1",
+//                "formName": "entity-registration",
+//                "entityId": "123"
+//            };
+//            var expectedFormModel = {
+//                "form": {
+//                    "bind_type": "entity",
+//                    "default_bind_path": "/Entity registration/",
+//                    "fields": [
+//                        {
+//                            "name": "field1",
+//                            "source": "entity.field1",
+//                            "value": "value1"
+//                        }
+//                    ],
+//                    "sub_forms": [
+//                        {
+//                            "bind_type": "childEntity",
+//                            "default_bind_path": "/Entity registration/Child Registration Entity Group",
+//                            "fields": [
+//                                {
+//                                    "name": "field2"
+//                                },
+//                                {
+//                                    "name": "field3"
+//                                },
+//                                {
+//                                    "name": "field4"
+//                                }
+//                            ],
+//                            "instances": [
+//                                {
+//                                    "field2": "value1.2",
+//                                    "field3": "value1.3",
+//                                    "field4": "value1.4"
+//                                },
+//                                {
+//                                    "field2": "value2.2",
+//                                    "field3": "value2.3",
+//                                    "field4": "value2.4"
+//                                }
+//                            ]
+//                        }
+//                    ]
+//
+//                }
+//            };
+//            spyOn(formDataRepository, 'getFormInstanceByFormTypeAndId').andReturn(null);
+//            spyOn(queryBuilder, 'loadEntityHierarchy').andReturn(entityValues);
+//
+//            var formModel = formModelMapper.mapToFormModel(entitiesDef, subFormDefinition, params);
+//
+//            expect(formModel).toEqual(expectedFormModel);
+//            expect(queryBuilder.loadEntityHierarchy).toHaveBeenCalledWith(entitiesDef, "entity", "123");
+//        });
+
     });
 });
