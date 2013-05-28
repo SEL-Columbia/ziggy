@@ -109,29 +109,24 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
         });
     };
 
+    var getValueFromHierarchyByPath = function (entityHierarchy, pathVariables) {
+        var value = entityHierarchy;
+        for (var index = 0; index < pathVariables.length; index++) {
+            var pathVariable = pathVariables[index];
+            if (enketo.hasValue(value[pathVariable])) {
+                value = value[pathVariable];
+            } else {
+                value = undefined;
+                break;
+            }
+        }
+        return value;
+    };
+
     var mapFieldValues = function (formDefinition, entityHierarchy) {
         formDefinition.form.fields.forEach(function (field) {
-            var fieldValue;
-            var entity;
-            var fieldName;
-            if (enketo.hasValue(field.source)) {
-                var pathVariables = field.source.split(".");
-                fieldValue = entityHierarchy;
-                for (var index = 0; index < pathVariables.length; index++) {
-                    var pathVariable = pathVariables[index];
-                    if (enketo.hasValue(fieldValue[pathVariable])) {
-                        fieldValue = fieldValue[pathVariable];
-                    } else {
-                        fieldValue = undefined;
-                        break;
-                    }
-                }
-            } else {
-                entity = formDefinition.form.bind_type;
-                fieldName = field.name;
-                fieldValue = entityHierarchy[entity][fieldName];
-                field.source = entity + "." + fieldName;
-            }
+            var pathVariables = field.source.split(".");
+            var fieldValue = getValueFromHierarchyByPath(entityHierarchy, pathVariables);
             if (enketo.hasValue(fieldValue)) {
                 field.value = fieldValue;
             }
@@ -158,18 +153,34 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
 
     var mapFieldValuesForSubForms = function (formDefinition, entitiesDefinition, entityHierarchy) {
         if (enketo.hasValue(formDefinition.form.sub_forms)) {
-            formDefinition.form.sub_forms.forEach(function (sub_form) {
-                var path = findPathToBaseEntityFromSubEntity(entitiesDefinition, formDefinition.form.bind_type, sub_form.bind_type);
-                var subEntities = entityHierarchy;
-                for (var index = 0; index < path.length; index++) {
-                    subEntities = subEntities[path[index]];
-                }
-                sub_form.instances = [];
+            formDefinition.form.sub_forms.forEach(function (subForm) {
+                addSourceToFields(subForm.fields, subForm.bind_type);
+                var path = findPathToBaseEntityFromSubEntity(entitiesDefinition, formDefinition.form.bind_type, subForm.bind_type);
+                var subEntities = getValueFromHierarchyByPath(entityHierarchy, path);
+                subForm.instances = [];
                 subEntities.forEach(function (subEntity) {
-                    sub_form.instances.push(subEntity);
+                    var subEntityInstance = null;
+                    subForm.fields.forEach(function (field) {
+                        var value = getValueFromHierarchyByPath(subEntity, field.source.split(".").slice(-1));
+                        if (enketo.hasValue(value)) {
+                            subEntityInstance = (subEntityInstance || {});
+                            subEntityInstance[field.name] = value;
+                        }
+                    });
+                    if (enketo.hasValue(subEntityInstance)) {
+                        subForm.instances.push(subEntityInstance);
+                    }
                 });
             });
         }
+    };
+
+    var addSourceToFields = function (fields, bindType) {
+        fields.forEach(function (field) {
+            if (!enketo.hasValue(field.source)) {
+                field.source = bindType + "." + field.name;
+            }
+        });
     };
 
     return {
@@ -182,13 +193,9 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
             if (!enketo.hasValue(entitiesDefinition)) {
                 return formDefinition;
             }
+            addSourceToFields(formDefinition.form.fields, formDefinition.form.bind_type);
             //TODO: not every case entityId maybe applicable.
             if (!enketo.hasValue(params.entityId)) {
-                formDefinition.form.fields.forEach(function (field) {
-                    if (!enketo.hasValue(field.source)) {
-                        field.source = formDefinition.form.bind_type + "." + field.name;
-                    }
-                });
                 return formDefinition;
             }
             //TODO: pass all the params to the query builder and let it decide what it wants to use for querying.

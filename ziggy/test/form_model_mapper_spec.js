@@ -534,13 +534,17 @@ describe("Form Model Mapper", function () {
                             "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
                             "fields": [
                                 {
-                                    "name": "field2"
+                                    "name": "field2",
+                                    "source": "child.field2"
+
                                 },
                                 {
-                                    "name": "field3"
+                                    "name": "field3",
+                                    "source": "child.field3"
                                 },
                                 {
-                                    "name": "field4"
+                                    "name": "field4",
+                                    "source": "child.field4"
                                 }
                             ],
                             "instances": []
@@ -566,13 +570,13 @@ describe("Form Model Mapper", function () {
                         field1: "value1",
                         child: [
                             {
-                                field2: "value1.2",
-                                field3: "value1.3",
+                                field2_source: "value1.2",
+                                field3_source: "value1.3",
                                 field4: "value1.4"
                             },
                             {
-                                field2: "value2.2",
-                                field3: "value2.3",
+                                field2_source: "value2.2",
+                                field3_source: "value2.3",
                                 field4: "value2.4"
                             }
                         ]
@@ -599,10 +603,13 @@ describe("Form Model Mapper", function () {
                             "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
                             "fields": [
                                 {
-                                    "name": "field2"
+                                    "name": "field2",
+                                    "source": "child.field2_source",
+                                    "bind": "/Child Entity registration/Child Registration Entity Group/field2_bind"
                                 },
                                 {
-                                    "name": "field3"
+                                    "name": "field3",
+                                    "source": "child.field3_source"
                                 },
                                 {
                                     "name": "field4"
@@ -629,13 +636,17 @@ describe("Form Model Mapper", function () {
                             "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
                             "fields": [
                                 {
-                                    "name": "field2"
+                                    "name": "field2",
+                                    "source": "child.field2_source",
+                                    "bind": "/Child Entity registration/Child Registration Entity Group/field2_bind"
                                 },
                                 {
-                                    "name": "field3"
+                                    "name": "field3",
+                                    "source": "child.field3_source"
                                 },
                                 {
-                                    "name": "field4"
+                                    "name": "field4",
+                                    "source": "child.field4"
                                 }
                             ],
                             "instances": [
@@ -663,6 +674,5 @@ describe("Form Model Mapper", function () {
             expect(formModel).toEqual(expectedFormModel);
             expect(queryBuilder.loadEntityHierarchy).toHaveBeenCalledWith(entitiesDef, "ec", "123");
         });
-
     });
 });
