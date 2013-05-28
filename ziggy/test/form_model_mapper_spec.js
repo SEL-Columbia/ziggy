@@ -560,24 +560,23 @@ describe("Form Model Mapper", function () {
 
         it("should create instances when there are sub entities", function () {
             var entityValues = {
-                mother: {
-                    field1: "value1",
-                    ec: {
-                        field5: "value5"
-                    },
-                    child: [
-                        {
-                            field2: "value1.2",
-                            field3: "value1.3",
-                            field4: "value1.4"
-                        },
-                        {
-                            field2: "value2.2",
-                            field3: "value2.3",
-                            field4: "value2.4"
-                        }
-
-                    ]
+                ec: {
+                    field5: "value5",
+                    mother: {
+                        field1: "value1",
+                        child: [
+                            {
+                                field2: "value1.2",
+                                field3: "value1.3",
+                                field4: "value1.4"
+                            },
+                            {
+                                field2: "value2.2",
+                                field3: "value2.3",
+                                field4: "value2.4"
+                            }
+                        ]
+                    }
                 }
             };
             var params = {
@@ -587,11 +586,11 @@ describe("Form Model Mapper", function () {
             };
             subFormDefinition = {
                 "form": {
-                    "bind_type": "mother",
+                    "bind_type": "ec",
                     "default_bind_path": "/Child Entity registration/",
                     "fields": [
                         {
-                            "name": "field1"
+                            "name": "field5"
                         }
                     ],
                     "sub_forms": [
@@ -615,13 +614,13 @@ describe("Form Model Mapper", function () {
             };
             var expectedFormModel = {
                 "form": {
-                    "bind_type": "mother",
+                    "bind_type": "ec",
                     "default_bind_path": "/Child Entity registration/",
                     "fields": [
                         {
-                            "name": "field1",
-                            "source": "mother.field1",
-                            "value": "value1"
+                            "name": "field5",
+                            "source": "ec.field5",
+                            "value": "value5"
                         }
                     ],
                     "sub_forms": [
@@ -662,7 +661,7 @@ describe("Form Model Mapper", function () {
             var formModel = formModelMapper.mapToFormModel(entitiesDef, subFormDefinition, params);
 
             expect(formModel).toEqual(expectedFormModel);
-            expect(queryBuilder.loadEntityHierarchy).toHaveBeenCalledWith(entitiesDef, "mother", "123");
+            expect(queryBuilder.loadEntityHierarchy).toHaveBeenCalledWith(entitiesDef, "ec", "123");
         });
 
     });

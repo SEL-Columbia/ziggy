@@ -146,14 +146,13 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
         if (enketo.hasValue(baseEntityRelation)) {
             return [baseEntityRelation.type, entityType];
         }
-        currentEntityDefinition.relations.forEach(function (relation) {
-            var path = findPathToBaseEntityFromSubEntity(entitiesDefinition, baseEntityType, relation.type);
+        for (var index = 0; index < currentEntityDefinition.relations.length; index++) {
+            var path = findPathToBaseEntityFromSubEntity(entitiesDefinition, baseEntityType, currentEntityDefinition.relations[index].type);
             if (enketo.hasValue(path)) {
                 path.push(entityType);
                 return path;
             }
-            return null;
-        });
+        }
         return null;
     };
 
