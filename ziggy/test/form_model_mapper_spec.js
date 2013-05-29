@@ -51,15 +51,15 @@ describe("Form Model Mapper", function () {
                 ]
             }
         };
-        entitiesDef = [
-            new enketo.EntityDef(
+        entitiesDef = new enketo.EntityDefinitions()
+            .add(new enketo.EntityDef(
                 "ec").addRelation(new enketo.RelationDef(
                     "mother",
                     "one_to_one",
                     "parent",
                     "ec.id",
-                    "mother.ec_id")),
-            new enketo.EntityDef(
+                    "mother.ec_id")))
+            .add(new enketo.EntityDef(
                 "mother").addRelation(new enketo.RelationDef(
                     "ec",
                     "one_to_one",
@@ -70,15 +70,14 @@ describe("Form Model Mapper", function () {
                     "one_to_many",
                     "parent",
                     "mother.id",
-                    "child.mother_id")),
-            new enketo.EntityDef(
+                    "child.mother_id")))
+            .add(new enketo.EntityDef(
                 "child").addRelation(new enketo.RelationDef(
                     "mother",
                     "many_to_one",
                     "child",
                     "child.mother_id",
-                    "mother.id"))
-        ];
+                    "mother.id")));
         formDataRepository = new enketo.FormDataRepository();
         queryBuilder = new enketo.SQLQueryBuilder(formDataRepository);
         idFactory = new enketo.IdFactory(new enketo.IdFactoryBridge());
@@ -87,7 +86,7 @@ describe("Form Model Mapper", function () {
 
     it("should get form model for a given form type from the saved form instance when it exists", function () {
         spyOn(formDataRepository, 'getFormInstanceByFormTypeAndId').andReturn(savedFormInstance);
-        var entities = null;
+        var entities = new enketo.EntityDefinitions();
         var params = {
             "id": "id 1",
             "formName": "entity-registration"
@@ -101,7 +100,7 @@ describe("Form Model Mapper", function () {
 
     it("should get form model with empty field values for a given form type when there is no saved form instance and no entity", function () {
         spyOn(formDataRepository, 'getFormInstanceByFormTypeAndId').andReturn(null);
-        var entities = null;
+        var entities = new enketo.EntityDefinitions();
         var params = {
             "id": "id 1",
             "formName": "entity-registration"
@@ -137,7 +136,7 @@ describe("Form Model Mapper", function () {
         };
 
         spyOn(formDataRepository, 'getFormInstanceByFormTypeAndId').andReturn(null);
-        var entities = [];
+        var entities = new enketo.EntityDefinitions();
         var params = {
             "id": "id 1",
             "formName": "entity-registration",
@@ -162,7 +161,7 @@ describe("Form Model Mapper", function () {
                 }
             }
         };
-        var entities = [];
+        var entities = new enketo.EntityDefinitions();
         var params = {
             "id": "id 1",
             "formName": "entity-registration",

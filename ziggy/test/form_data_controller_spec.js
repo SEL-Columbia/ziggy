@@ -14,7 +14,7 @@ describe("Form Data Controller", function () {
         submissionRouter = new enketo.FormSubmissionRouter();
     });
 
-    it("should get form model for given a form type when there is no instance id.", function () {
+    it("should get form model for given form type when there is no instance id.", function () {
         var expectedFormModel = {};
         var formDefinition = {};
         var params = {
@@ -32,7 +32,7 @@ describe("Form Data Controller", function () {
 
         expect(actualFormModel).toBe(expectedFormModel);
         expect(formDefinitionLoader.load).toHaveBeenCalledWith("entity registration");
-        expect(formModelMapper.mapToFormModel).toHaveBeenCalledWith(entityRelationshipJSON, formDefinition, params);
+        expect(formModelMapper.mapToFormModel).toHaveBeenCalledWith(jasmine.any(enketo.EntityDefinitions), formDefinition, params);
     });
 
     it("should save form submission.", function () {
@@ -67,7 +67,7 @@ describe("Form Data Controller", function () {
         formDataController.save(params, formModel);
 
         expect(formDataRepository.saveFormSubmission).toHaveBeenCalledWith(params, formModel);
-        expect(formModelMapper.mapToEntityAndSave).toHaveBeenCalledWith(jasmine.any(Array), formModel);
+        expect(formModelMapper.mapToEntityAndSave).toHaveBeenCalledWith(jasmine.any(enketo.EntityDefinitions), formModel);
     });
 
     it("should create/update entities.", function () {
@@ -103,7 +103,7 @@ describe("Form Data Controller", function () {
         formDataController.createOrUpdateEntity(params, formModel);
 
         expect(formDataRepository.saveFormSubmission).not.toHaveBeenCalled();
-        expect(formModelMapper.mapToEntityAndSave).toHaveBeenCalledWith(jasmine.any(Array), formModel);
+        expect(formModelMapper.mapToEntityAndSave).toHaveBeenCalledWith(jasmine.any(enketo.EntityDefinitions), formModel);
         expect(submissionRouter.route).toHaveBeenCalledWith("instance id 1");
     });
 

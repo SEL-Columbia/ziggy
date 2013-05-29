@@ -15,11 +15,8 @@ describe("SQL query builder", function () {
             }
         });
         spyOn(formDataRepository, "queryUniqueResult").andReturn(expectedEntity);
-        var entityTypes = [
-            {
-                "type": "entity"
-            }
-        ];
+        var entityTypes = new enketo.EntityDefinitions()
+            .add(new enketo.EntityDef("entity"));
 
         var entities = sqlQueryBuilder.loadEntityHierarchy(entityTypes, "entity", "entity id 1");
 
@@ -27,48 +24,33 @@ describe("SQL query builder", function () {
     });
 
     it("should load entity with all its children", function () {
-        var entities = [
-            {
-                "type": "ec",
-                "relations": [
-                    {
-                        "type": "mother",
-                        "kind": "one_to_one",
-                        "from": "ec.id",
-                        "to": "mother.ec_id"
-                    }
-                ]
-            },
-            {
-                "type": "mother",
-                "relations": [
-                    {
-                        "type": "ec",
-                        "kind": "one_to_one",
-                        "from": "mother.ec_id",
-                        "to": "ec.id"
-                    },
-                    {
-                        "type": "child",
-                        "kind": "one_to_many",
-                        "from": "mother.id",
-                        "to": "child.mother_id"
-                    }
-                ]
-            },
-            {
-                "type": "child",
-                "relations": [
-                    {
-                        "type": "mother",
-                        "kind": "many_to_one",
-                        "from": "child.mother_id",
-                        "to": "mother.id"
-                    }
-                ]
-
-            }
-        ];
+        var entitiesDefinition = new enketo.EntityDefinitions()
+            .add(new enketo.EntityDef(
+                "ec").addRelation(new enketo.RelationDef(
+                    "mother",
+                    "one_to_one",
+                    "parent",
+                    "ec.id",
+                    "mother.ec_id")))
+            .add(new enketo.EntityDef(
+                "mother").addRelation(new enketo.RelationDef(
+                    "ec",
+                    "one_to_one",
+                    "child",
+                    "mother.ec_id",
+                    "ec.id")).addRelation(new enketo.RelationDef(
+                    "child",
+                    "one_to_many",
+                    "parent",
+                    "mother.id",
+                    "child.mother_id")))
+            .add(new enketo.EntityDef(
+                "child").addRelation(new enketo.RelationDef(
+                    "mother",
+                    "many_to_one",
+                    "child",
+                    "child.mother_id",
+                    "mother.id")));
         var expectedEntity = JSON.stringify({
             "ec": {
                 "id": "ec id 1",
@@ -123,53 +105,39 @@ describe("SQL query builder", function () {
             return null;
         });
 
-        var ec = sqlQueryBuilder.loadEntityHierarchy(entities, "ec", "ec id 1");
+        var ec = sqlQueryBuilder.loadEntityHierarchy(entitiesDefinition, "ec", "ec id 1");
 
         expect(JSON.stringify(ec)).toBe(expectedEntity);
     });
 
     it("should load entity with all its parent", function () {
-        var entities = [
-            {
-                "type": "ec",
-                "relations": [
-                    {
-                        "type": "mother",
-                        "kind": "one_to_one",
-                        "from": "ec.id",
-                        "to": "mother.ec_id"
-                    }
-                ]
-            },
-            {
-                "type": "mother",
-                "relations": [
-                    {
-                        "type": "ec",
-                        "kind": "one_to_one",
-                        "from": "mother.ec_id",
-                        "to": "ec.id"
-                    },
-                    {
-                        "type": "child",
-                        "kind": "one_to_many",
-                        "from": "mother.id",
-                        "to": "child.mother_id"
-                    }
-                ]
-            },
-            {
-                "type": "child",
-                "relations": [
-                    {
-                        "type": "mother",
-                        "kind": "many_to_one",
-                        "from": "child.mother_id",
-                        "to": "mother.id"
-                    }
-                ]
-            }
-        ];
+        var entitiesDefinition = new enketo.EntityDefinitions()
+            .add(new enketo.EntityDef(
+                "ec").addRelation(new enketo.RelationDef(
+                    "mother",
+                    "one_to_one",
+                    "parent",
+                    "ec.id",
+                    "mother.ec_id")))
+            .add(new enketo.EntityDef(
+                "mother").addRelation(new enketo.RelationDef(
+                    "ec",
+                    "one_to_one",
+                    "child",
+                    "mother.ec_id",
+                    "ec.id")).addRelation(new enketo.RelationDef(
+                    "child",
+                    "one_to_many",
+                    "parent",
+                    "mother.id",
+                    "child.mother_id")))
+            .add(new enketo.EntityDef(
+                "child").addRelation(new enketo.RelationDef(
+                    "mother",
+                    "many_to_one",
+                    "child",
+                    "child.mother_id",
+                    "mother.id")));
         var expectedEntity = JSON.stringify({
             "child": {
                 "id": "child id 1",
@@ -207,54 +175,39 @@ describe("SQL query builder", function () {
                 });
         });
 
-        var child = sqlQueryBuilder.loadEntityHierarchy(entities, "child", "child id 1");
+        var child = sqlQueryBuilder.loadEntityHierarchy(entitiesDefinition, "child", "child id 1");
 
         expect(JSON.stringify(child)).toBe(expectedEntity);
     });
 
     it("should load entity with both its parents and children", function () {
-        var entities = [
-            {
-                "type": "ec",
-                "relations": [
-                    {
-                        "type": "mother",
-                        "kind": "one_to_one",
-                        "from": "ec.id",
-                        "to": "mother.ec_id"
-                    }
-                ]
-            },
-            {
-                "type": "mother",
-                "relations": [
-                    {
-                        "type": "ec",
-                        "kind": "one_to_one",
-                        "from": "mother.ec_id",
-                        "to": "ec.id"
-                    },
-                    {
-                        "type": "child",
-                        "kind": "one_to_many",
-                        "from": "mother.id",
-                        "to": "child.mother_id"
-                    }
-                ]
-            },
-            {
-                "type": "child",
-                "relations": [
-                    {
-                        "type": "mother",
-                        "kind": "many_to_one",
-                        "from": "child.mother_id",
-                        "to": "mother.id"
-                    }
-                ]
-
-            }
-        ];
+        var entitiesDefinition = new enketo.EntityDefinitions()
+            .add(new enketo.EntityDef(
+                "ec").addRelation(new enketo.RelationDef(
+                    "mother",
+                    "one_to_one",
+                    "parent",
+                    "ec.id",
+                    "mother.ec_id")))
+            .add(new enketo.EntityDef(
+                "mother").addRelation(new enketo.RelationDef(
+                    "ec",
+                    "one_to_one",
+                    "child",
+                    "mother.ec_id",
+                    "ec.id")).addRelation(new enketo.RelationDef(
+                    "child",
+                    "one_to_many",
+                    "parent",
+                    "mother.id",
+                    "child.mother_id")))
+            .add(new enketo.EntityDef(
+                "child").addRelation(new enketo.RelationDef(
+                    "mother",
+                    "many_to_one",
+                    "child",
+                    "child.mother_id",
+                    "mother.id")));
         var expectedEntity = JSON.stringify({
             "mother": {
                 "id": "mother id 1",
@@ -299,7 +252,7 @@ describe("SQL query builder", function () {
             return null;
         });
 
-        var child = sqlQueryBuilder.loadEntityHierarchy(entities, "mother", "mother id 1");
+        var child = sqlQueryBuilder.loadEntityHierarchy(entitiesDefinition, "mother", "mother id 1");
 
         expect(JSON.stringify(child)).toBe(expectedEntity);
     });

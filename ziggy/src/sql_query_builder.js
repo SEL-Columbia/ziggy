@@ -4,17 +4,9 @@ if (typeof enketo === "undefined" || !enketo) {
 
 enketo.SQLQueryBuilder = function (formDataRepository) {
     "use strict";
-    var findEntityByType = function (entities, type) {
-        for (var index = 0; index < entities.length; index++) {
-            if (entities[index].type === type) {
-                return entities[index];
-            }
-        }
-        return null;
-    };
 
-    var loadEntityObjectAndItsRelatives = function (entitiesDefn, parentInstance, parentType, contextRelation) {
-        var baseEntity = findEntityByType(entitiesDefn, contextRelation.type);
+    var loadEntityObjectAndItsRelatives = function (entitiesDefinition, parentInstance, parentType, contextRelation) {
+        var baseEntity = entitiesDefinition.findEntityByType(contextRelation.type);
         var column = contextRelation.from.split(".")[1];
         var sql = "select * from {0} where {1} = '{2}'".format(contextRelation.type, contextRelation.to, parentInstance[column]);
         var baseInstance = JSON.parse(queryMethod(contextRelation)(sql));
@@ -28,7 +20,7 @@ enketo.SQLQueryBuilder = function (formDataRepository) {
         //TODO: When baseEntity is a list, relatives have to be loaded for each instance
         baseEntity.relations.forEach(function (relation) {
             if (relation.type !== parentType) {
-                var relative = loadEntityObjectAndItsRelatives(entitiesDefn, baseInstance, baseEntity.type, relation);
+                var relative = loadEntityObjectAndItsRelatives(entitiesDefinition, baseInstance, baseEntity.type, relation);
                 if (enketo.hasValue(relative)) {
                     baseInstance[relation.type] = relative;
                 }
@@ -47,16 +39,16 @@ enketo.SQLQueryBuilder = function (formDataRepository) {
     };
 
     return {
-        loadEntityHierarchy: function (entitiesDefn, baseEntityType, baseEntityId) {
-            var baseEntityDefn = findEntityByType(entitiesDefn, baseEntityType);
+        loadEntityHierarchy: function (entitiesDefinition, baseEntityType, baseEntityId) {
+            var baseEntityDefinition = entitiesDefinition.findEntityByType(baseEntityType);
             //TODO : Need to format the sql as per the data type
             var sql = "select * from {0} where id = '{1}'".format(baseEntityType, baseEntityId);
             var baseEntity = JSON.parse(formDataRepository.queryUniqueResult(sql));
-            if (!enketo.hasValue(baseEntityDefn.relations) || baseEntityDefn.relations.length === 0) {
+            if (!enketo.hasValue(baseEntityDefinition.relations) || baseEntityDefinition.relations.length === 0) {
                 return baseEntity;
             }
-            baseEntityDefn.relations.forEach(function (relation) {
-                baseEntity[relation.type] = loadEntityObjectAndItsRelatives(entitiesDefn, baseEntity, baseEntityType, relation);
+            baseEntityDefinition.relations.forEach(function (relation) {
+                baseEntity[relation.type] = loadEntityObjectAndItsRelatives(entitiesDefinition, baseEntity, baseEntityType, relation);
             });
             var entityWithRelatives = {};
             entityWithRelatives[baseEntityType] = baseEntity;

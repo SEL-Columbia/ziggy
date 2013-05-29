@@ -98,11 +98,11 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
         });
     };
 
-    var persist = function (entitiesDef, entity, entitiesToSave, updatedEntities) {
+    var persist = function (entity, entitiesToSave, updatedEntities) {
         var parentRelations = entity.findParents();
         parentRelations.forEach(function (parentRelation) {
             if (shouldPersistEntity(entitiesToSave, findEntityByType(entitiesToSave, parentRelation.type), updatedEntities)) {
-                persist(entitiesDef, findEntityByType(entitiesToSave, parentRelation.type), entitiesToSave, updatedEntities);
+                persist(findEntityByType(entitiesToSave, parentRelation.type), entitiesToSave, updatedEntities);
             }
         });
 
@@ -124,7 +124,7 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
                 childEntities.forEach(function (childEntity) {
                     if (shouldPersistEntity(entitiesToSave, childEntity, updatedEntities)) {
                         addParentReferenceFieldToChildEntity(childRelation, entitiesToSave, entityId, childEntity);
-                        persist(entitiesDef, childEntity, entitiesToSave, updatedEntities);
+                        persist(childEntity, entitiesToSave, updatedEntities);
                     }
                 });
             }
@@ -132,7 +132,7 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
                 var childEntity = findEntityByType(entitiesToSave, childRelation.type);
                 if (shouldPersistEntity(entitiesToSave, childEntity, updatedEntities)) {
                     addParentReferenceFieldToChildEntity(childRelation, entitiesToSave, entityId, childEntity);
-                    persist(entitiesDef, childEntity, entitiesToSave, updatedEntities);
+                    persist(childEntity, entitiesToSave, updatedEntities);
                 }
             }
         });
@@ -163,9 +163,7 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
     };
 
     var findPathToBaseEntityFromSubEntity = function (entitiesDefinition, baseEntityType, entityType) {
-        var currentEntityDefinition = entitiesDefinition.filter(function (entityDefinition) {
-            return entityDefinition.type === entityType;
-        })[0];
+        var currentEntityDefinition = entitiesDefinition.findEntityByType(entityType);
         var baseEntityRelation = currentEntityDefinition.getRelationByType(baseEntityType);
         if (enketo.hasValue(baseEntityRelation)) {
             return [baseEntityRelation.type, entityType];
@@ -233,14 +231,14 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
             mapFieldValuesForSubForms(formDefinition, entitiesDefinition, entityHierarchy);
             return formDefinition;
         },
-        mapToEntityAndSave: function (entitiesDef, formModel) {
+        mapToEntityAndSave: function (entitiesDefinition, formModel) {
             var entitiesToSave = [];
             formModel.form.fields.forEach(function (field) {
                 var pathVariables = field.source.split(".");
                 var entityTypeOfField = pathVariables[pathVariables.length - 2];
                 var entityInstance = findEntityByType(entitiesToSave, entityTypeOfField);
                 if (!enketo.hasValue(entityInstance)) {
-                    entityInstance = findEntityByType(entitiesDef, entityTypeOfField).createInstance();
+                    entityInstance = entitiesDefinition.findEntityByType(entityTypeOfField).createInstance();
                     entityInstance.source = field.source.substring(0, field.source.lastIndexOf("."));
                     entitiesToSave.push(entityInstance);
                 }
@@ -250,7 +248,7 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
             if (enketo.hasValue(formModel.form.sub_forms)) {
                 formModel.form.sub_forms.forEach(function (subForm) {
                     subForm.instances.forEach(function (instance) {
-                        var subEntityInstance = findEntityByType(entitiesDef, subForm.bind_type).createInstance();
+                        var subEntityInstance = entitiesDefinition.findEntityByType(subForm.bind_type).createInstance();
                         subForm.fields.forEach(function (field) {
                             var pathVariables = field.source.split(".");
                             subEntityInstance.createField(field.name, field.source, pathVariables[pathVariables.length - 1], instance[field.name]);
@@ -265,7 +263,7 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
             entitiesToSave = entitiesToSave.concat(subEntitiesToSave);
             var updatedEntities = [];
             var baseEntity = findEntityByType(entitiesToSave, formModel.form.bind_type);
-            persist(entitiesDef, baseEntity, entitiesToSave, updatedEntities);
+            persist(baseEntity, entitiesToSave, updatedEntities);
         }
     };
 };
