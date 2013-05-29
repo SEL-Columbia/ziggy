@@ -264,7 +264,8 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
             identify(subEntitiesToSave, formModel);
             entitiesToSave = entitiesToSave.concat(subEntitiesToSave);
             var updatedEntities = [];
-            persist(entitiesDef, findEntityByType(entitiesToSave, formModel.form.bind_type), entitiesToSave, updatedEntities);
+            var baseEntity = findEntityByType(entitiesToSave, formModel.form.bind_type);
+            persist(entitiesDef, baseEntity, entitiesToSave, updatedEntities);
         }
     };
 };

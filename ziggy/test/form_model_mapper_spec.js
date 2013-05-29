@@ -833,19 +833,23 @@ describe("Form Model Mapper", function () {
         it("should update sub entities while saving form when entities.", function () {
             var subFormModel = {
                 "form": {
-                    "bind_type": "mother",
-                    "default_bind_path": "/Mother registration/",
+                    "bind_type": "ec",
+                    "default_bind_path": "/Children registration/",
                     "fields": [
                         {
                             "name": "id",
-                            "source": "mother.id",
-                            "value": "mother id 1"
+                            "source": "ec.id",
+                            "value": "ec id 1"
                         },
                         {
                             "name": "field1",
-                            "source": "mother.field1",
-                            "bind": "field1_bind",
+                            "source": "ec.field1",
                             "value": "value1"
+                        },
+                        {
+                            "name": "motherId",
+                            "source": "ec.mother.id",
+                            "value": "mother id 1"
                         }
                     ],
                     "sub_forms": [
@@ -883,9 +887,13 @@ describe("Form Model Mapper", function () {
                     ]
                 }
             };
+            var expectedECInstance = {
+                "id": "ec id 1",
+                "field1": "value1"
+            };
             var expectedMotherInstance = {
                 "id": "mother id 1",
-                "field1": "value1"
+                "ec_id": "ec id 1"
             };
             var expectedFirstChildInstance = {
                 "field2_source": "value1.2",
@@ -906,6 +914,7 @@ describe("Form Model Mapper", function () {
 
             formModelMapper.mapToEntityAndSave(entitiesDef, subFormModel);
 
+            expect(formDataRepository.saveEntity).toHaveBeenCalledWith("ec", expectedECInstance);
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("mother", expectedMotherInstance);
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedFirstChildInstance);
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedSecondChildInstance);
