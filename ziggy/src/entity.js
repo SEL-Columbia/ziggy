@@ -40,6 +40,16 @@ enketo.EntityDef = function (type) {
         return self;
     };
 
+    self.createField = function (name, source, persistenceName, value) {
+        self.fields.push({
+            "name": name,
+            "source": source,
+            "persistenceName": persistenceName,
+            "value": value
+        });
+        return self;
+    };
+
     self.findParents = function () {
         return findRelativesWhoAre("child");
     };

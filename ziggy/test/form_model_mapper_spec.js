@@ -675,4 +675,240 @@ describe("Form Model Mapper", function () {
             expect(queryBuilder.loadEntityHierarchy).toHaveBeenCalledWith(entitiesDef, "ec", "123");
         });
     });
+
+    describe("Form Model Mapper Sub Form save", function () {
+        it("should ignore empty sub entities when saving form.", function () {
+            var subFormModel = {
+                "form": {
+                    "bind_type": "mother",
+                    "default_bind_path": "/Mother registration/",
+                    "fields": [
+                        {
+                            "name": "id",
+                            "source": "mother.id",
+                            "value": "mother id 1"
+                        },
+                        {
+                            "name": "field1",
+                            "source": "mother.field1",
+                            "bind": "field1_bind",
+                            "value": "value1"
+                        },
+                        {
+                            "name": "ecId",
+                            "source": "mother.ec.id",
+                            "value": "ec id 1"
+                        },
+                        {
+                            "name": "field2",
+                            "source": "mother.ec.field2",
+                            "bind": "field2_bind",
+                            "value": "value2"
+                        }
+                    ],
+                    "sub_forms": [
+                        {
+                            "bind_type": "child",
+                            "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
+                            "fields": [
+                                {
+                                    "name": "field3",
+                                    "source": "child.field3_source",
+                                    "bind": "/Child Entity registration/Child Registration Entity Group/field3_bind"
+                                },
+                                {
+                                    "name": "field4",
+                                    "source": "child.field4_source"
+                                }
+                            ],
+                            "instances": []
+                        }
+                    ]
+                }
+            };
+            var expectedECInstance = {
+                "id": "ec id 1",
+                "field2": "value2"
+            };
+            var expectedMotherInstance = {
+                "id": "mother id 1",
+                "field1": "value1",
+                "ec_id": "ec id 1"
+            };
+            spyOn(formDataRepository, "saveEntity");
+            spyOn(idFactory, 'generateIdFor').andCallFake(function (entityType) {
+                return "new uuid : " + entityType;
+            });
+
+            formModelMapper.mapToEntityAndSave(entitiesDef, subFormModel);
+
+            expect(formDataRepository.saveEntity).toHaveBeenCalledWith("ec", expectedECInstance);
+            expect(formDataRepository.saveEntity).toHaveBeenCalledWith("mother", expectedMotherInstance);
+            expect(formDataRepository.saveEntity).not.toHaveBeenCalledWith("child", jasmine.any(Object));
+        });
+
+        it("should create sub entities when saving form.", function () {
+            var subFormModel = {
+                "form": {
+                    "bind_type": "mother",
+                    "default_bind_path": "/Mother registration/",
+                    "fields": [
+                        {
+                            "name": "id",
+                            "source": "mother.id",
+                            "value": "mother id 1"
+                        },
+                        {
+                            "name": "field1",
+                            "source": "mother.field1",
+                            "bind": "field1_bind",
+                            "value": "value1"
+                        }
+                    ],
+                    "sub_forms": [
+                        {
+                            "bind_type": "child",
+                            "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
+                            "fields": [
+                                {
+                                    "name": "field2",
+                                    "source": "child.field2_source",
+                                    "bind": "/Child Entity registration/Child Registration Entity Group/field2_bind"
+                                },
+                                {
+                                    "name": "field3",
+                                    "source": "child.field3_source"
+                                }
+                            ],
+                            "instances": [
+                                {
+                                    "field2": "value1.2",
+                                    "field3": "value1.3"
+                                }
+                                ,
+                                {
+                                    "field2": "value2.2",
+                                    "field3": "value2.3"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+            var expectedMotherInstance = {
+                "id": "mother id 1",
+                "field1": "value1"
+            };
+            var expectedFirstChildInstance = {
+                "field2_source": "value1.2",
+                "field3_source": "value1.3",
+                "id": "child id 1",
+                "mother_id": "mother id 1"
+            };
+            var expectedSecondChildInstance = {
+                "field2_source": "value2.2",
+                "field3_source": "value2.3",
+                "id": "child id 2",
+                "mother_id": "mother id 1"
+            };
+            var id = 0;
+            spyOn(formDataRepository, "saveEntity");
+            spyOn(idFactory, 'generateIdFor').andCallFake(function (entityType) {
+                if (entityType === "child") {
+                    id++;
+                    return "child id " + id;
+                }
+                else {
+                    return "new uuid : " + entityType;
+                }
+            });
+
+            formModelMapper.mapToEntityAndSave(entitiesDef, subFormModel);
+
+            expect(formDataRepository.saveEntity).toHaveBeenCalledWith("mother", expectedMotherInstance);
+            expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedFirstChildInstance);
+            expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedSecondChildInstance);
+        });
+
+        it("should update sub entities while saving form when entities.", function () {
+            var subFormModel = {
+                "form": {
+                    "bind_type": "mother",
+                    "default_bind_path": "/Mother registration/",
+                    "fields": [
+                        {
+                            "name": "id",
+                            "source": "mother.id",
+                            "value": "mother id 1"
+                        },
+                        {
+                            "name": "field1",
+                            "source": "mother.field1",
+                            "bind": "field1_bind",
+                            "value": "value1"
+                        }
+                    ],
+                    "sub_forms": [
+                        {
+                            "bind_type": "child",
+                            "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
+                            "fields": [
+                                {
+                                    "name": "id",
+                                    "source": "child.id"
+                                },
+                                {
+                                    "name": "field2",
+                                    "source": "child.field2_source",
+                                    "bind": "/Child Entity registration/Child Registration Entity Group/field2_bind"
+                                },
+                                {
+                                    "name": "field3",
+                                    "source": "child.field3_source"
+                                }
+                            ],
+                            "instances": [
+                                {
+                                    "id": "child id 0",
+                                    "field2": "value1.2",
+                                    "field3": "value1.3"
+                                }
+                                ,
+                                {
+                                    "field2": "value2.2",
+                                    "field3": "value2.3"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+            var expectedMotherInstance = {
+                "id": "mother id 1",
+                "field1": "value1"
+            };
+            var expectedFirstChildInstance = {
+                "field2_source": "value1.2",
+                "field3_source": "value1.3",
+                "id": "child id 0",
+                "mother_id": "mother id 1"
+            };
+            var expectedSecondChildInstance = {
+                "field2_source": "value2.2",
+                "field3_source": "value2.3",
+                "id": "new uuid : child",
+                "mother_id": "mother id 1"
+            };
+            spyOn(formDataRepository, "saveEntity");
+            spyOn(idFactory, 'generateIdFor').andCallFake(function (entityType) {
+                return "new uuid : " + entityType;
+            });
+
+            formModelMapper.mapToEntityAndSave(entitiesDef, subFormModel);
+
+            expect(formDataRepository.saveEntity).toHaveBeenCalledWith("mother", expectedMotherInstance);
+            expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedFirstChildInstance);
+            expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedSecondChildInstance);
+        });
+    });
 });
