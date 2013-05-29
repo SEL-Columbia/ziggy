@@ -2,7 +2,7 @@ if (typeof enketo === "undefined" || !enketo) {
     var enketo = {};
 }
 
-enketo.EntityDef = function (type) {
+enketo.Entity = function (type) {
     "use strict";
 
     var self = this;
@@ -14,26 +14,8 @@ enketo.EntityDef = function (type) {
     };
 
     self.type = type;
-    //Do not modify this by doing EntityDef.relations
     self.relations = [];
     self.fields = [];
-
-    self.addRelation = function (rel) {
-        self.relations.push(rel);
-        return self;
-    };
-
-    self.removeAllRelations = function () {
-        self.relations = [];
-    };
-
-    self.createInstance = function () {
-        var instance = new enketo.EntityDef(self.type);
-        self.relations.forEach(function (rel) {
-            instance.relations.push(rel.createInstance());
-        });
-        return instance;
-    };
 
     self.addField = function (field) {
         self.fields.push(field);
@@ -64,18 +46,12 @@ enketo.EntityDef = function (type) {
         })[0];
     };
 
-    self.getRelationByType = function (type) {
-        return self.relations.filter(function (relation) {
-            return relation.type === type;
-        })[0];
-    };
-
     self.iterateThroughFields = function (mapFunction) {
         return self.fields.forEach(mapFunction);
     };
 };
 
-enketo.RelationDef = function (type, kind, as, from, to) {
+enketo.Relation = function (type, kind, as, from, to) {
     "use strict";
 
     var self = this;
@@ -85,8 +61,4 @@ enketo.RelationDef = function (type, kind, as, from, to) {
     self.as = as;
     self.from = from;
     self.to = to;
-
-    self.createInstance = function () {
-        return new enketo.RelationDef(self.type, self.kind, self.as, self.from, self.to);
-    };
 };

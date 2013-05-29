@@ -164,7 +164,7 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
 
     var findPathToBaseEntityFromSubEntity = function (entitiesDefinition, baseEntityType, entityType) {
         var currentEntityDefinition = entitiesDefinition.findEntityByType(entityType);
-        var baseEntityRelation = currentEntityDefinition.getRelationByType(baseEntityType);
+        var baseEntityRelation = currentEntityDefinition.findRelationByType(baseEntityType);
         if (enketo.hasValue(baseEntityRelation)) {
             return [baseEntityRelation.type, entityType];
         }
