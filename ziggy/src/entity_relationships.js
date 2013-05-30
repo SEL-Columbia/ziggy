@@ -8,11 +8,11 @@ enketo.EntityRelationships = function (jsonDefinition) {
     var determineEntities = function () {
         var entityDefinitions = new enketo.EntityDefinitions();
         jsonDefinition.forEach(function (relation) {
-            var entity = entityDefinitions.findEntityByType(relation.parent);
+            var entity = entityDefinitions.findEntityDefinitionByType(relation.parent);
             if (!enketo.hasValue(entity)) {
                 entityDefinitions.add(new enketo.EntityDef(relation.parent));
             }
-            entity = entityDefinitions.findEntityByType(relation.child);
+            entity = entityDefinitions.findEntityDefinitionByType(relation.child);
             if (!enketo.hasValue(entity)) {
                 entityDefinitions.add(new enketo.EntityDef(relation.child));
             }
@@ -27,17 +27,17 @@ enketo.EntityRelationships = function (jsonDefinition) {
             }
             var entityDefinitions = determineEntities();
             jsonDefinition.forEach(function (relation) {
-                var parentEntity = entityDefinitions.findEntityByType(relation.parent);
-                if (!enketo.hasValue(parentEntity.relations)) {
-                    parentEntity.removeAllRelations();
+                var parentEntityDefinition = entityDefinitions.findEntityDefinitionByType(relation.parent);
+                if (!enketo.hasValue(parentEntityDefinition.relations)) {
+                    parentEntityDefinition.removeAllRelations();
                 }
-                parentEntity.addRelation(new enketo.RelationDef(relation.child, relation.kind, "parent", relation.from, relation.to));
+                parentEntityDefinition.addRelation(new enketo.RelationDef(relation.child, relation.kind, "parent", relation.from, relation.to));
 
-                var childEntity = entityDefinitions.findEntityByType(relation.child);
-                if (!enketo.hasValue(childEntity.relations)) {
-                    childEntity.removeAllRelations();
+                var childEntityDefinition = entityDefinitions.findEntityDefinitionByType(relation.child);
+                if (!enketo.hasValue(childEntityDefinition.relations)) {
+                    childEntityDefinition.removeAllRelations();
                 }
-                childEntity.addRelation(new enketo.RelationDef(relation.parent, enketo.RelationKind[relation.kind].inverse.type, "child", relation.to, relation.from));
+                childEntityDefinition.addRelation(new enketo.RelationDef(relation.parent, enketo.RelationKind[relation.kind].inverse.type, "child", relation.to, relation.from));
             });
             return entityDefinitions;
         }

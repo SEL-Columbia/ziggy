@@ -675,7 +675,7 @@ describe("Form Model Mapper", function () {
         });
     });
 
-    describe("Form Model Mapper Sub Form save", function () {
+    describe("Sub Form save", function () {
         it("should ignore empty sub entities when saving form.", function () {
             var subFormModel = {
                 "form": {
