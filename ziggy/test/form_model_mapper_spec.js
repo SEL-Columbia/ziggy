@@ -783,8 +783,7 @@ describe("Form Model Mapper", function () {
                                 {
                                     "field2": "value1.2",
                                     "field3": "value1.3"
-                                }
-                                ,
+                                },
                                 {
                                     "field2": "value2.2",
                                     "field3": "value2.3"
@@ -875,8 +874,7 @@ describe("Form Model Mapper", function () {
                                     "id": "child id 0",
                                     "field2": "value1.2",
                                     "field3": "value1.3"
-                                }
-                                ,
+                                },
                                 {
                                     "field2": "value2.2",
                                     "field3": "value2.3"

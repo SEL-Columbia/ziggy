@@ -142,9 +142,9 @@ describe("Form Data Controller", function () {
         spyOn(formDefinitionLoader, 'load').andReturn(formDefinition);
         spyOn(formDataRepository, 'saveFormSubmission');
         spyOn(formModelMapper, 'mapToEntityAndSave').andCallFake(function (entityRelationship, formModel) {
-            formModel["form"] = {};
+            formModel.form = {};
             formModel.form.bind_type = "ec";
-            formModel.form["fields"] = [
+            formModel.form.fields = [
                 {
                     source: "ec.id",
                     value: "ec id 1"
@@ -177,9 +177,9 @@ describe("Form Data Controller", function () {
         spyOn(formDataRepository, 'saveFormSubmission').andReturn("instance id 1");
         spyOn(submissionRouter, 'route');
         spyOn(formModelMapper, 'mapToEntityAndSave').andCallFake(function (entityRelationship, formModel) {
-            formModel["form"] = {};
+            formModel.form = {};
             formModel.form.bind_type = "ec";
-            formModel.form["fields"] = [
+            formModel.form.fields = [
                 {
                     source: "ec.id",
                     value: "ec id 1"

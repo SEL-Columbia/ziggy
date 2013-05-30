@@ -24,7 +24,7 @@ enketo.EntityDefinitions = function () {
     };
 
     self.hasEntityDefinitions = function () {
-        return self.entityDefinitions.length !== 0
+        return self.entityDefinitions.length !== 0;
     };
 
     self.findPathToBaseEntityFromSubEntity = function (baseEntityType, entityType) {

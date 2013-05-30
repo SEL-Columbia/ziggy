@@ -85,12 +85,12 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
             if (childRelation.kind === enketo.RelationKind.one_to_many.type) {
                 var childEntities = entitiesToSave.findEntitiesByType(childRelation.type);
                 childEntities.forEach(function (childEntity) {
-                    persistChildEntityIfNeeded(childEntity, entitiesToSave, updatedEntities, currentEntityId, childRelation)
+                    persistChildEntityIfNeeded(childEntity, entitiesToSave, updatedEntities, currentEntityId, childRelation);
                 });
             }
             else {
                 var childEntity = entitiesToSave.findEntityByType(childRelation.type);
-                persistChildEntityIfNeeded(childEntity, entitiesToSave, updatedEntities, currentEntityId, childRelation)
+                persistChildEntityIfNeeded(childEntity, entitiesToSave, updatedEntities, currentEntityId, childRelation);
             }
         });
     };
