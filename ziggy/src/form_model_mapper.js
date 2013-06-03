@@ -33,24 +33,33 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
         }
     };
 
-    var identify = function (entitiesToSave, formModel) {
+    var identifyEntities = function (entitiesToSave, formModel) {
         entitiesToSave.forEach(function (entity) {
-            var idField = entity.getFieldByPersistenceName("id");
-            if (!enketo.hasValue(idField)) {
-                idField = {
-                    "name": entity.source + ".id",
-                    "source": entity.source + ".id",
-                    "persistenceName": "id",
-                    "value": idFactory.generateIdFor(entity.type)
-                };
-                entity.addField(idField);
-                addIdValueToFormModel(formModel, idField);
-            }
-            else if (!enketo.hasValue(idField.value)) {
-                idField.value = idFactory.generateIdFor(entity.type);
-                addIdValueToFormModel(formModel, idField);
-            }
+            var idField = identifyEntity(entity);
+            addIdValueToFormModel(formModel, idField);
         });
+    };
+
+    var identifySubEntity = function (subEntity, subFormInstance) {
+        var idField = identifyEntity(subEntity);
+        subFormInstance.id = idField.value;
+    };
+
+    var identifyEntity = function (entity) {
+        var idField = entity.getFieldByPersistenceName("id");
+        if (!enketo.hasValue(idField)) {
+            idField = {
+                "name": entity.source + ".id",
+                "source": entity.source + ".id",
+                "persistenceName": "id",
+                "value": idFactory.generateIdFor(entity.type)
+            };
+            entity.addField(idField);
+        }
+        else if (!enketo.hasValue(idField.value)) {
+            idField.value = idFactory.generateIdFor(entity.type);
+        }
+        return idField;
     };
 
     var persistChildEntityIfNeeded = function (childEntity, entitiesToSave, updatedEntities, parentEntityId, childRelation) {
@@ -195,12 +204,12 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
                             subEntityInstance.createField(field.name, field.source, pathVariables[pathVariables.length - 1], instance[field.name]);
                         });
                         subEntityInstance.source = subForm.bind_type;
+                        identifySubEntity(subEntityInstance, instance);
                         subEntitiesToSave.add(subEntityInstance);
                     });
                 });
             }
-            identify(entitiesToSave, formModel);
-            identify(subEntitiesToSave, formModel);
+            identifyEntities(entitiesToSave, formModel);
             entitiesToSave.addAll(subEntitiesToSave);
             var updatedEntities = new enketo.Entities();
             var baseEntity = entitiesToSave.findEntityByType(formModel.form.bind_type);

@@ -770,6 +770,10 @@ describe("Form Model Mapper", function () {
                             "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
                             "fields": [
                                 {
+                                    "name": "id",
+                                    "source": "child.id"
+                                },
+                                {
                                     "name": "field2",
                                     "source": "child.field2_source",
                                     "bind": "/Child Entity registration/Child Registration Entity Group/field2_bind"
@@ -787,6 +791,58 @@ describe("Form Model Mapper", function () {
                                 {
                                     "field2": "value2.2",
                                     "field3": "value2.3"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+            var expectedSubFormModel = {
+                "form": {
+                    "bind_type": "mother",
+                    "default_bind_path": "/Mother registration/",
+                    "fields": [
+                        {
+                            "name": "id",
+                            "source": "mother.id",
+                            "value": "mother id 1"
+                        },
+                        {
+                            "name": "field1",
+                            "source": "mother.field1",
+                            "bind": "field1_bind",
+                            "value": "value1"
+                        }
+                    ],
+                    "sub_forms": [
+                        {
+                            "bind_type": "child",
+                            "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
+                            "fields": [
+                                {
+                                    "name": "id",
+                                    "source": "child.id"
+                                },
+                                {
+                                    "name": "field2",
+                                    "source": "child.field2_source",
+                                    "bind": "/Child Entity registration/Child Registration Entity Group/field2_bind"
+                                },
+                                {
+                                    "name": "field3",
+                                    "source": "child.field3_source"
+                                }
+                            ],
+                            "instances": [
+                                {
+                                    "field2": "value1.2",
+                                    "field3": "value1.3",
+                                    "id": "child id 1"
+                                },
+                                {
+                                    "field2": "value2.2",
+                                    "field3": "value2.3",
+                                    "id": "child id 2"
                                 }
                             ]
                         }
@@ -823,6 +879,7 @@ describe("Form Model Mapper", function () {
 
             formModelMapper.mapToEntityAndSave(entitiesDef, subFormModel);
 
+            expect(JSON.stringify(subFormModel)).toBe(JSON.stringify(expectedSubFormModel));
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("mother", expectedMotherInstance);
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedFirstChildInstance);
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedSecondChildInstance);
@@ -884,6 +941,62 @@ describe("Form Model Mapper", function () {
                     ]
                 }
             };
+            var expectedSubFormModel = {
+                "form": {
+                    "bind_type": "ec",
+                    "default_bind_path": "/Children registration/",
+                    "fields": [
+                        {
+                            "name": "id",
+                            "source": "ec.id",
+                            "value": "ec id 1"
+                        },
+                        {
+                            "name": "field1",
+                            "source": "ec.field1",
+                            "value": "value1"
+                        },
+                        {
+                            "name": "motherId",
+                            "source": "ec.mother.id",
+                            "value": "mother id 1"
+                        }
+                    ],
+                    "sub_forms": [
+                        {
+                            "bind_type": "child",
+                            "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
+                            "fields": [
+                                {
+                                    "name": "id",
+                                    "source": "child.id"
+                                },
+                                {
+                                    "name": "field2",
+                                    "source": "child.field2_source",
+                                    "bind": "/Child Entity registration/Child Registration Entity Group/field2_bind"
+                                },
+                                {
+                                    "name": "field3",
+                                    "source": "child.field3_source"
+                                }
+                            ],
+                            "instances": [
+                                {
+                                    "id": "child id 0",
+                                    "field2": "value1.2",
+                                    "field3": "value1.3"
+                                },
+                                {
+                                    "field2": "value2.2",
+                                    "field3": "value2.3",
+                                    "id": "new uuid : child"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
             var expectedECInstance = {
                 "id": "ec id 1",
                 "field1": "value1"
@@ -911,6 +1024,7 @@ describe("Form Model Mapper", function () {
 
             formModelMapper.mapToEntityAndSave(entitiesDef, subFormModel);
 
+            expect(JSON.stringify(subFormModel)).toBe(JSON.stringify(expectedSubFormModel));
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("ec", expectedECInstance);
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("mother", expectedMotherInstance);
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedFirstChildInstance);
