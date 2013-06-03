@@ -72,7 +72,7 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
         var currentEntityId;
         if (shouldPersistEntity(entity, entitiesToSave, updatedEntities)) {
             var entityFields = {};
-            entity.forEach(function (field) {
+            entity.forEachField(function (field) {
                 entityFields[field.persistenceName] = field.value;
             });
             formDataRepository.saveEntity(entity.type, entityFields);

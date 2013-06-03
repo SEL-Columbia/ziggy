@@ -46,7 +46,7 @@ enketo.Entity = function (type) {
         })[0];
     };
 
-    self.forEach = function (mapFunction) {
+    self.forEachField = function (mapFunction) {
         return self.fields.forEach(mapFunction);
     };
 };
