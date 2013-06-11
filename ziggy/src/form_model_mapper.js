@@ -131,10 +131,8 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
     var mapFieldValuesForSubForms = function (formDefinition, entitiesDefinition, entityHierarchy) {
         if (enketo.hasValue(formDefinition.form.sub_forms)) {
             formDefinition.form.sub_forms.forEach(function (subForm) {
-                addSourceToFields(subForm.fields, subForm.bind_type);
                 var path = entitiesDefinition.findPathToBaseEntityFromSubEntity(formDefinition.form.bind_type, subForm.bind_type);
                 var subEntities = getValueFromHierarchyByPath(entityHierarchy, path);
-                subForm.instances = [];
                 subEntities.forEach(function (subEntity) {
                     var subEntityInstance = null;
                     subForm.fields.forEach(function (field) {
@@ -160,6 +158,15 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
         });
     };
 
+    var setupSubFormFieldsAndInstances = function (formDefinition) {
+        if (enketo.hasValue(formDefinition.form.sub_forms)) {
+            formDefinition.form.sub_forms.forEach(function (subForm) {
+                addSourceToFields(subForm.fields, subForm.bind_type);
+                subForm.instances = [];
+            });
+        }
+    };
+
     return {
         mapToFormModel: function (entitiesDefinition, formDefinition, params) {
             //TODO: Handle errors, savedFormInstance could be null!
@@ -171,6 +178,7 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
                 return formDefinition;
             }
             addSourceToFields(formDefinition.form.fields, formDefinition.form.bind_type);
+            setupSubFormFieldsAndInstances(formDefinition);
             //TODO: not every case entityId maybe applicable.
             if (!enketo.hasValue(params.entityId)) {
                 return formDefinition;

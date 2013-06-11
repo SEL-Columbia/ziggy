@@ -561,6 +561,79 @@ describe("Form Model Mapper", function () {
             expect(queryBuilder.loadEntityHierarchy).toHaveBeenCalledWith(entitiesDef, "mother", "123");
         });
 
+        it("should add empty instance list and source to all sub-form fields even when there is no entity id", function () {
+            var params = {
+                "id": "id 1",
+                "formName": "entity-registration"
+            };
+            subFormDefinition = {
+                "form": {
+                    "bind_type": "mother",
+                    "default_bind_path": "/Child Entity registration/",
+                    "fields": [
+                        {
+                            "name": "field1"
+                        }
+                    ],
+                    "sub_forms": [
+                        {
+                            "bind_type": "child",
+                            "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
+                            "fields": [
+                                {
+                                    "name": "field2"
+                                },
+                                {
+                                    "name": "field3"
+                                },
+                                {
+                                    "name": "field4"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            };
+            var expectedFormModel = {
+                "form": {
+                    "bind_type": "mother",
+                    "default_bind_path": "/Child Entity registration/",
+                    "fields": [
+                        {
+                            "name": "field1",
+                            "source": "mother.field1"
+                        }
+                    ],
+                    "sub_forms": [
+                        {
+                            "bind_type": "child",
+                            "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
+                            "fields": [
+                                {
+                                    "name": "field2",
+                                    "source": "child.field2"
+                                },
+                                {
+                                    "name": "field3",
+                                    "source": "child.field3"
+                                },
+                                {
+                                    "name": "field4",
+                                    "source": "child.field4"
+                                }
+                            ],
+                            "instances": []
+                        }
+                    ]
+
+                }
+            };
+            spyOn(formDataRepository, 'getFormInstanceByFormTypeAndId').andReturn(null);
+
+            var formModel = formModelMapper.mapToFormModel(entitiesDef, subFormDefinition, params);
+            expect(formModel).toEqual(expectedFormModel);
+        });
+
         it("should create instances when there are sub entities", function () {
             var entityValues = {
                 ec: {
