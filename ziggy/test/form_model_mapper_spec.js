@@ -475,6 +475,110 @@ describe("Form Model Mapper", function () {
         expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedChildInstance);
     });
 
+    it("should not load values for fields marked with shouldLoadValue as false", function () {
+        var entityValues = {
+            entity: {
+                field1: "value1",
+                field2: "value2",
+                childEntity: {
+                    field3: "value3",
+                    grandChildEntity: {
+                        field4: "value4"
+                    }
+                }
+            }
+        };
+        var entities = new enketo.EntityDefinitions();
+        var params = {
+            "id": "id 1",
+            "formName": "entity-registration",
+            "entityId": "123"
+        };
+        formDefinition = {
+            "form": {
+                "bind_type": "entity",
+                "default_bind_path": "/Entity registration/",
+                "fields": [
+                    {
+                        "name": "field1"
+                    },
+                    {
+                        "name": "field2",
+                        "shouldLoadValue": false,
+                        "bind": "field2_bind"
+                    },
+                    {
+                        "name": "field3",
+                        "bind": "field3_bind",
+                        "source": "entity.childEntity.field3"
+                    },
+                    {
+                        "name": "field4",
+                        "bind": "field4_bind",
+                        "source": "entity.childEntity.grandChildEntity.field4"
+                    },
+                    {
+                        "name": "field5",
+                        "bind": "field4_bind",
+                        "source": "entity.childEntity.field5"
+                    },
+                    {
+                        "name": "previousFPMethod",
+                        "source": "entity.field1"
+                    }
+                ]
+            }
+        };
+        var expectedFormModel = {
+            "form": {
+                "bind_type": "entity",
+                "default_bind_path": "/Entity registration/",
+                "fields": [
+                    {
+                        "name": "field1",
+                        "source": "entity.field1",
+                        "value": "value1"
+                    },
+                    {
+                        "name": "field2",
+                        "shouldLoadValue": false,
+                        "bind": "field2_bind",
+                        "source": "entity.field2"
+                    },
+                    {
+                        "name": "field3",
+                        "bind": "field3_bind",
+                        "source": "entity.childEntity.field3",
+                        "value": "value3"
+                    },
+                    {
+                        "name": "field4",
+                        "bind": "field4_bind",
+                        "source": "entity.childEntity.grandChildEntity.field4",
+                        "value": "value4"
+                    },
+                    {
+                        "name": "field5",
+                        "bind": "field4_bind",
+                        "source": "entity.childEntity.field5"
+                    },
+                    {
+                        "name": "previousFPMethod",
+                        "source": "entity.field1",
+                        "value": "value1"
+                    }
+                ]
+            }
+        };
+        spyOn(formDataRepository, 'getFormInstanceByFormTypeAndId').andReturn(null);
+        spyOn(queryBuilder, 'loadEntityHierarchy').andReturn(entityValues);
+
+        var formModel = formModelMapper.mapToFormModel(entities, formDefinition, params);
+
+        expect(formModel).toEqual(expectedFormModel);
+        expect(queryBuilder.loadEntityHierarchy).toHaveBeenCalledWith(entities, "entity", "123");
+    });
+
     describe("Sub form mapper", function () {
         it("should create empty instances when there are no sub entities", function () {
             var entityValues = {
@@ -644,12 +748,14 @@ describe("Form Model Mapper", function () {
                             {
                                 field2_source: "value1.2",
                                 field3_source: "value1.3",
-                                field4: "value1.4"
+                                field4: "value1.4",
+                                field5: "value1.5"
                             },
                             {
                                 field2_source: "value2.2",
                                 field3_source: "value2.3",
-                                field4: "value2.4"
+                                field4: "value2.4",
+                                field5: "value2.5"
                             }
                         ]
                     }
@@ -685,6 +791,10 @@ describe("Form Model Mapper", function () {
                                 },
                                 {
                                     "name": "field4"
+                                },
+                                {
+                                    "name": "field5",
+                                    "shouldLoadValue": false
                                 }
                             ]
                         }
@@ -719,6 +829,11 @@ describe("Form Model Mapper", function () {
                                 {
                                     "name": "field4",
                                     "source": "child.field4"
+                                },
+                                {
+                                    "name": "field5",
+                                    "shouldLoadValue": false,
+                                    "source": "child.field5"
                                 }
                             ],
                             "instances": [
@@ -1103,109 +1218,5 @@ describe("Form Model Mapper", function () {
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedFirstChildInstance);
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedSecondChildInstance);
         });
-    });
-
-    it("should not load values for fields marked with shouldLoadValue as false", function () {
-        var entityValues = {
-            entity: {
-                field1: "value1",
-                field2: "value2",
-                childEntity: {
-                    field3: "value3",
-                    grandChildEntity: {
-                        field4: "value4"
-                    }
-                }
-            }
-        };
-        var entities = new enketo.EntityDefinitions();
-        var params = {
-            "id": "id 1",
-            "formName": "entity-registration",
-            "entityId": "123"
-        };
-        formDefinition = {
-            "form": {
-                "bind_type": "entity",
-                "default_bind_path": "/Entity registration/",
-                "fields": [
-                    {
-                        "name": "field1"
-                    },
-                    {
-                        "name": "field2",
-                        "shouldLoadValue": false,
-                        "bind": "field2_bind"
-                    },
-                    {
-                        "name": "field3",
-                        "bind": "field3_bind",
-                        "source": "entity.childEntity.field3"
-                    },
-                    {
-                        "name": "field4",
-                        "bind": "field4_bind",
-                        "source": "entity.childEntity.grandChildEntity.field4"
-                    },
-                    {
-                        "name": "field5",
-                        "bind": "field4_bind",
-                        "source": "entity.childEntity.field5"
-                    },
-                    {
-                        "name": "previousFPMethod",
-                        "source": "entity.field1"
-                    }
-                ]
-            }
-        };
-        var expectedFormModel = {
-            "form": {
-                "bind_type": "entity",
-                "default_bind_path": "/Entity registration/",
-                "fields": [
-                    {
-                        "name": "field1",
-                        "source": "entity.field1",
-                        "value": "value1"
-                    },
-                    {
-                        "name": "field2",
-                        "shouldLoadValue": false,
-                        "bind": "field2_bind",
-                        "source": "entity.field2"
-                    },
-                    {
-                        "name": "field3",
-                        "bind": "field3_bind",
-                        "source": "entity.childEntity.field3",
-                        "value": "value3"
-                    },
-                    {
-                        "name": "field4",
-                        "bind": "field4_bind",
-                        "source": "entity.childEntity.grandChildEntity.field4",
-                        "value": "value4"
-                    },
-                    {
-                        "name": "field5",
-                        "bind": "field4_bind",
-                        "source": "entity.childEntity.field5"
-                    },
-                    {
-                        "name": "previousFPMethod",
-                        "source": "entity.field1",
-                        "value": "value1"
-                    }
-                ]
-            }
-        };
-        spyOn(formDataRepository, 'getFormInstanceByFormTypeAndId').andReturn(null);
-        spyOn(queryBuilder, 'loadEntityHierarchy').andReturn(entityValues);
-
-        var formModel = formModelMapper.mapToFormModel(entities, formDefinition, params);
-
-        expect(formModel).toEqual(expectedFormModel);
-        expect(queryBuilder.loadEntityHierarchy).toHaveBeenCalledWith(entities, "entity", "123");
     });
 });

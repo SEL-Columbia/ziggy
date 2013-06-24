@@ -139,10 +139,12 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
                 subEntities.forEach(function (subEntity) {
                     var subEntityInstance = null;
                     subForm.fields.forEach(function (field) {
-                        var value = getValueFromHierarchyByPath(subEntity, field.source.split(".").slice(-1));
-                        if (enketo.hasValue(value)) {
-                            subEntityInstance = (subEntityInstance || {});
-                            subEntityInstance[field.name] = value;
+                        if (field.shouldLoadValue !== false) {
+                            var value = getValueFromHierarchyByPath(subEntity, field.source.split(".").slice(-1));
+                            if (enketo.hasValue(value)) {
+                                subEntityInstance = (subEntityInstance || {});
+                                subEntityInstance[field.name] = value;
+                            }
                         }
                     });
                     if (enketo.hasValue(subEntityInstance)) {
