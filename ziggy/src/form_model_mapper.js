@@ -120,10 +120,13 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
 
     var mapFieldValues = function (formDefinition, entityHierarchy) {
         formDefinition.form.fields.forEach(function (field) {
-            var pathVariables = field.source.split(".");
-            var fieldValue = getValueFromHierarchyByPath(entityHierarchy, pathVariables);
-            if (enketo.hasValue(fieldValue)) {
-                field.value = fieldValue;
+            if (field.shouldLoadValue !== false) {
+                var pathVariables = field.source.split(".");
+                var fieldValue = getValueFromHierarchyByPath(entityHierarchy, pathVariables);
+                if (enketo.hasValue(fieldValue)) {
+                    field.value = fieldValue;
+
+                }
             }
         });
     };

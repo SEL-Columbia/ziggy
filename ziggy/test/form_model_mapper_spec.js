@@ -1104,4 +1104,108 @@ describe("Form Model Mapper", function () {
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedSecondChildInstance);
         });
     });
+
+    it("should not load values for fields marked with shouldLoadValue as false", function () {
+        var entityValues = {
+            entity: {
+                field1: "value1",
+                field2: "value2",
+                childEntity: {
+                    field3: "value3",
+                    grandChildEntity: {
+                        field4: "value4"
+                    }
+                }
+            }
+        };
+        var entities = new enketo.EntityDefinitions();
+        var params = {
+            "id": "id 1",
+            "formName": "entity-registration",
+            "entityId": "123"
+        };
+        formDefinition = {
+            "form": {
+                "bind_type": "entity",
+                "default_bind_path": "/Entity registration/",
+                "fields": [
+                    {
+                        "name": "field1"
+                    },
+                    {
+                        "name": "field2",
+                        "shouldLoadValue": false,
+                        "bind": "field2_bind"
+                    },
+                    {
+                        "name": "field3",
+                        "bind": "field3_bind",
+                        "source": "entity.childEntity.field3"
+                    },
+                    {
+                        "name": "field4",
+                        "bind": "field4_bind",
+                        "source": "entity.childEntity.grandChildEntity.field4"
+                    },
+                    {
+                        "name": "field5",
+                        "bind": "field4_bind",
+                        "source": "entity.childEntity.field5"
+                    },
+                    {
+                        "name": "previousFPMethod",
+                        "source": "entity.field1"
+                    }
+                ]
+            }
+        };
+        var expectedFormModel = {
+            "form": {
+                "bind_type": "entity",
+                "default_bind_path": "/Entity registration/",
+                "fields": [
+                    {
+                        "name": "field1",
+                        "source": "entity.field1",
+                        "value": "value1"
+                    },
+                    {
+                        "name": "field2",
+                        "shouldLoadValue": false,
+                        "bind": "field2_bind",
+                        "source": "entity.field2"
+                    },
+                    {
+                        "name": "field3",
+                        "bind": "field3_bind",
+                        "source": "entity.childEntity.field3",
+                        "value": "value3"
+                    },
+                    {
+                        "name": "field4",
+                        "bind": "field4_bind",
+                        "source": "entity.childEntity.grandChildEntity.field4",
+                        "value": "value4"
+                    },
+                    {
+                        "name": "field5",
+                        "bind": "field4_bind",
+                        "source": "entity.childEntity.field5"
+                    },
+                    {
+                        "name": "previousFPMethod",
+                        "source": "entity.field1",
+                        "value": "value1"
+                    }
+                ]
+            }
+        };
+        spyOn(formDataRepository, 'getFormInstanceByFormTypeAndId').andReturn(null);
+        spyOn(queryBuilder, 'loadEntityHierarchy').andReturn(entityValues);
+
+        var formModel = formModelMapper.mapToFormModel(entities, formDefinition, params);
+
+        expect(formModel).toEqual(expectedFormModel);
+        expect(queryBuilder.loadEntityHierarchy).toHaveBeenCalledWith(entities, "entity", "123");
+    });
 });
