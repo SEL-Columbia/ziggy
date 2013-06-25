@@ -173,30 +173,36 @@ describe("Form Model Mapper", function () {
                 "default_bind_path": "/Entity registration/",
                 "fields": [
                     {
-                        "name": "field1"
+                        "name": "field1" ,
+                        "shouldLoadValue": true
                     },
                     {
                         "name": "field2",
-                        "bind": "field2_bind"
+                        "bind": "field2_bind",
+                        "shouldLoadValue": true
                     },
                     {
                         "name": "field3",
                         "bind": "field3_bind",
-                        "source": "entity.childEntity.field3"
+                        "source": "entity.childEntity.field3",
+                        "shouldLoadValue": true
                     },
                     {
                         "name": "field4",
                         "bind": "field4_bind",
-                        "source": "entity.childEntity.grandChildEntity.field4"
+                        "source": "entity.childEntity.grandChildEntity.field4",
+                        "shouldLoadValue": true
                     },
                     {
                         "name": "field5",
                         "bind": "field4_bind",
-                        "source": "entity.childEntity.field5"
+                        "source": "entity.childEntity.field5",
+                        "shouldLoadValue": true
                     },
                     {
                         "name": "previousFPMethod",
-                        "source": "entity.field1"
+                        "source": "entity.field1",
+                        "shouldLoadValue": true
                     }
                 ]
             }
@@ -209,34 +215,40 @@ describe("Form Model Mapper", function () {
                     {
                         "name": "field1",
                         "source": "entity.field1",
+                        "shouldLoadValue": true,
                         "value": "value1"
                     },
                     {
                         "name": "field2",
                         "bind": "field2_bind",
                         "source": "entity.field2",
+                        "shouldLoadValue": true,
                         "value": "value2"
                     },
                     {
                         "name": "field3",
                         "bind": "field3_bind",
                         "source": "entity.childEntity.field3",
+                        "shouldLoadValue": true,
                         "value": "value3"
                     },
                     {
                         "name": "field4",
                         "bind": "field4_bind",
                         "source": "entity.childEntity.grandChildEntity.field4",
+                        "shouldLoadValue": true,
                         "value": "value4"
                     },
                     {
                         "name": "field5",
                         "bind": "field4_bind",
-                        "source": "entity.childEntity.field5"
+                        "source": "entity.childEntity.field5",
+                        "shouldLoadValue": true
                     },
                     {
                         "name": "previousFPMethod",
                         "source": "entity.field1",
+                        "shouldLoadValue": true,
                         "value": "value1"
                     }
                 ]
@@ -475,7 +487,8 @@ describe("Form Model Mapper", function () {
         expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedChildInstance);
     });
 
-    it("should not load values for fields marked with shouldLoadValue as false", function () {
+
+    it("should not load values for fields not marked with shouldLoadValue as true", function () {
         var entityValues = {
             entity: {
                 field1: "value1",
@@ -500,31 +513,35 @@ describe("Form Model Mapper", function () {
                 "default_bind_path": "/Entity registration/",
                 "fields": [
                     {
-                        "name": "field1"
+                        "name": "field1",
+                        "shouldLoadValue": true
                     },
                     {
                         "name": "field2",
-                        "shouldLoadValue": false,
                         "bind": "field2_bind"
                     },
                     {
                         "name": "field3",
                         "bind": "field3_bind",
-                        "source": "entity.childEntity.field3"
+                        "source": "entity.childEntity.field3",
+                        "shouldLoadValue": true
                     },
                     {
                         "name": "field4",
                         "bind": "field4_bind",
-                        "source": "entity.childEntity.grandChildEntity.field4"
+                        "source": "entity.childEntity.grandChildEntity.field4",
+                        "shouldLoadValue": true
                     },
                     {
                         "name": "field5",
                         "bind": "field4_bind",
-                        "source": "entity.childEntity.field5"
+                        "source": "entity.childEntity.field5",
+                        "shouldLoadValue": true
                     },
                     {
                         "name": "previousFPMethod",
-                        "source": "entity.field1"
+                        "source": "entity.field1",
+                        "shouldLoadValue": true
                     }
                 ]
             }
@@ -537,11 +554,11 @@ describe("Form Model Mapper", function () {
                     {
                         "name": "field1",
                         "source": "entity.field1",
+                        "shouldLoadValue": true,
                         "value": "value1"
                     },
                     {
                         "name": "field2",
-                        "shouldLoadValue": false,
                         "bind": "field2_bind",
                         "source": "entity.field2"
                     },
@@ -549,22 +566,26 @@ describe("Form Model Mapper", function () {
                         "name": "field3",
                         "bind": "field3_bind",
                         "source": "entity.childEntity.field3",
+                        "shouldLoadValue": true,
                         "value": "value3"
                     },
                     {
                         "name": "field4",
                         "bind": "field4_bind",
                         "source": "entity.childEntity.grandChildEntity.field4",
+                        "shouldLoadValue": true,
                         "value": "value4"
                     },
                     {
                         "name": "field5",
                         "bind": "field4_bind",
-                        "source": "entity.childEntity.field5"
+                        "source": "entity.childEntity.field5",
+                        "shouldLoadValue": true
                     },
                     {
                         "name": "previousFPMethod",
                         "source": "entity.field1",
+                        "shouldLoadValue": true,
                         "value": "value1"
                     }
                 ]
@@ -598,7 +619,8 @@ describe("Form Model Mapper", function () {
                     "default_bind_path": "/Child Entity registration/",
                     "fields": [
                         {
-                            "name": "field1"
+                            "name": "field1",
+                            "shouldLoadValue": true
                         }
                     ],
                     "sub_forms": [
@@ -607,13 +629,16 @@ describe("Form Model Mapper", function () {
                             "default_bind_path": "/Child Entity registration/Child Registration Entity Group",
                             "fields": [
                                 {
-                                    "name": "field2"
+                                    "name": "field2",
+                                    "shouldLoadValue": true
                                 },
                                 {
-                                    "name": "field3"
+                                    "name": "field3",
+                                    "shouldLoadValue": true
                                 },
                                 {
-                                    "name": "field4"
+                                    "name": "field4",
+                                    "shouldLoadValue": true
                                 }
                             ]
                         }
@@ -627,6 +652,7 @@ describe("Form Model Mapper", function () {
                     "fields": [
                         {
                             "name": "field1",
+                            "shouldLoadValue": true,
                             "source": "mother.field1",
                             "value": "value1"
                         }
@@ -638,15 +664,18 @@ describe("Form Model Mapper", function () {
                             "fields": [
                                 {
                                     "name": "field2",
+                                    "shouldLoadValue": true,
                                     "source": "child.field2"
 
                                 },
                                 {
                                     "name": "field3",
+                                    "shouldLoadValue": true,
                                     "source": "child.field3"
                                 },
                                 {
                                     "name": "field4",
+                                    "shouldLoadValue": true,
                                     "source": "child.field4"
                                 }
                             ],
@@ -772,7 +801,8 @@ describe("Form Model Mapper", function () {
                     "default_bind_path": "/Child Entity registration/",
                     "fields": [
                         {
-                            "name": "field5"
+                            "name": "field5",
+                            "shouldLoadValue": true
                         }
                     ],
                     "sub_forms": [
@@ -783,18 +813,20 @@ describe("Form Model Mapper", function () {
                                 {
                                     "name": "field2",
                                     "source": "child.field2_source",
-                                    "bind": "/Child Entity registration/Child Registration Entity Group/field2_bind"
+                                    "bind": "/Child Entity registration/Child Registration Entity Group/field2_bind",
+                                    "shouldLoadValue": true
                                 },
                                 {
                                     "name": "field3",
-                                    "source": "child.field3_source"
+                                    "source": "child.field3_source",
+                                    "shouldLoadValue": true
                                 },
                                 {
-                                    "name": "field4"
+                                    "name": "field4",
+                                    "shouldLoadValue": true
                                 },
                                 {
-                                    "name": "field5",
-                                    "shouldLoadValue": false
+                                    "name": "field5"
                                 }
                             ]
                         }
@@ -808,6 +840,7 @@ describe("Form Model Mapper", function () {
                     "fields": [
                         {
                             "name": "field5",
+                            "shouldLoadValue": true,
                             "source": "ec.field5",
                             "value": "value5"
                         }
@@ -820,19 +853,21 @@ describe("Form Model Mapper", function () {
                                 {
                                     "name": "field2",
                                     "source": "child.field2_source",
-                                    "bind": "/Child Entity registration/Child Registration Entity Group/field2_bind"
+                                    "bind": "/Child Entity registration/Child Registration Entity Group/field2_bind",
+                                    "shouldLoadValue": true
                                 },
                                 {
                                     "name": "field3",
-                                    "source": "child.field3_source"
+                                    "source": "child.field3_source",
+                                    "shouldLoadValue": true
                                 },
                                 {
                                     "name": "field4",
+                                    "shouldLoadValue": true,
                                     "source": "child.field4"
                                 },
                                 {
                                     "name": "field5",
-                                    "shouldLoadValue": false,
                                     "source": "child.field5"
                                 }
                             ],
