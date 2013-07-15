@@ -173,7 +173,7 @@ describe("Form Model Mapper", function () {
                 "default_bind_path": "/Entity registration/",
                 "fields": [
                     {
-                        "name": "field1" ,
+                        "name": "field1",
                         "shouldLoadValue": true
                     },
                     {
@@ -1252,6 +1252,65 @@ describe("Form Model Mapper", function () {
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("mother", expectedMotherInstance);
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedFirstChildInstance);
             expect(formDataRepository.saveEntity).toHaveBeenCalledWith("child", expectedSecondChildInstance);
+        });
+
+        it("should update fields from fieldOverrides map", function () {
+            var entityValues = {
+                entity: {
+                    field1: "value1",
+                    fieldToBeOverridden: "value2"
+                }
+            };
+            var entities = new enketo.EntityDefinitions();
+            var params = {
+                "id": "id 1",
+                "formName": "entity-registration",
+                "entityId": "123",
+                "fieldOverrides": '{"fieldToBeOverridden": "Overridden_value2"}'
+            };
+            formDefinition = {
+                "form": {
+                    "bind_type": "entity",
+                    "default_bind_path": "/Entity registration/",
+                    "fields": [
+                        {
+                            "name": "field1",
+                            "shouldLoadValue": true
+                        },
+                        {
+                            "name": "fieldToBeOverridden",
+                            "shouldLoadValue": true
+                        }
+                    ]
+                }
+            };
+            var expectedFormModel = {
+                "form": {
+                    "bind_type": "entity",
+                    "default_bind_path": "/Entity registration/",
+                    "fields": [
+                        {
+                            "name": "field1",
+                            "shouldLoadValue": true,
+                            "source": "entity.field1",
+                            "value": "value1"
+                        },
+                        {
+                            "name": "fieldToBeOverridden",
+                            "shouldLoadValue": true,
+                            "source": "entity.fieldToBeOverridden",
+                            "value": "Overridden_value2"
+                        }
+                    ]
+                }
+            };
+            spyOn(formDataRepository, 'getFormInstanceByFormTypeAndId').andReturn(null);
+            spyOn(queryBuilder, 'loadEntityHierarchy').andReturn(entityValues);
+
+            var formModel = formModelMapper.mapToFormModel(entities, formDefinition, params);
+
+            expect(formModel).toEqual(expectedFormModel);
+            expect(queryBuilder.loadEntityHierarchy).toHaveBeenCalledWith(entities, "entity", "123");
         });
     });
 });

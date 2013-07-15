@@ -118,6 +118,14 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
         return value;
     };
 
+    var findFieldByName = function (fields, name) {
+        return fields.filter(function (field) {
+            if (field.name === name) {
+                return field;
+            }
+        })[0];
+    };
+
     var mapFieldValues = function (formDefinition, entityHierarchy) {
         formDefinition.form.fields.forEach(function (field) {
             if (field.shouldLoadValue) {
@@ -125,7 +133,6 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
                 var fieldValue = getValueFromHierarchyByPath(entityHierarchy, pathVariables);
                 if (enketo.hasValue(fieldValue)) {
                     field.value = fieldValue;
-
                 }
             }
         });
@@ -152,6 +159,23 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
                     }
                 });
             });
+        }
+    };
+
+    var overrideGivenFieldValues = function (formDefinition, fieldOverridesJSON) {
+        if (!enketo.hasValue(fieldOverridesJSON)) {
+            return;
+        }
+        //Double decoding is a hack. Need this until Enketo stops encoding query parameters.
+        var decodedJSON = decodeURIComponent(decodeURIComponent(fieldOverridesJSON));
+        var fieldOverrides = JSON.parse(decodedJSON);
+        for (var fieldToBeOverridden in fieldOverrides) {
+            if (fieldOverrides.hasOwnProperty(fieldToBeOverridden)) {
+                var formField = findFieldByName(formDefinition.form.fields, fieldToBeOverridden);
+                if (enketo.hasValue(formField)) {
+                    formField.value = fieldOverrides[fieldToBeOverridden];
+                }
+            }
         }
     };
 
@@ -191,6 +215,7 @@ enketo.FormModelMapper = function (formDataRepository, queryBuilder, idFactory) 
             //TODO: pass all the params to the query builder and let it decide what it wants to use for querying.
             var entityHierarchy = queryBuilder.loadEntityHierarchy(entitiesDefinition, formDefinition.form.bind_type, params.entityId);
             mapFieldValues(formDefinition, entityHierarchy);
+            overrideGivenFieldValues(formDefinition, params.fieldOverrides);
             mapFieldValuesForSubForms(formDefinition, entitiesDefinition, entityHierarchy);
             return formDefinition;
         },
