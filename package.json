@@ -1,8 +1,16 @@
 {
+    "name": "ziggy",
+    "version": "0.1.0",
     "devDependencies": {
-        "karma": "~0.8"
+        "karma": "~0.8",
+        "grunt": "~0.4.1",
+        "grunt-contrib-clean": "~0.5.0",
+        "grunt-contrib-jshint": "~0.6.0",
+        "grunt-contrib-uglify": "~0.2.2",
+        "grunt-contrib-concat": "~0.3.0",
+        "grunt-karma": "~0.4.5"
     },
     "scripts": {
-        "test": "./node_modules/.bin/karma start ziggy/test/conf/karma.conf.js --single-run --browsers PhantomJS"
+        "test": "grunt"
     }
 }
