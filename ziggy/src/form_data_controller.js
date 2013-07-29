@@ -11,8 +11,8 @@ enketo.FormDataController = function (entityRelationshipLoader, formDefinitionLo
         if (!enketo.hasValue(self.entityRelationshipsJsonDefinition)) {
             self.entityRelationshipsJsonDefinition = entityRelationshipLoader.load();
         }
-        if (!enketo.hasValue(self.entityDefinitions)) {
-            self.entityDefinitions = enketo.EntityRelationships(self.entityRelationshipsJsonDefinition).determineEntitiesAndRelations();
+        if (!enketo.hasValue(self.entityDefinitions) && !enketo.hasValue(self.formDefinition)) {
+            self.entityDefinitions = enketo.EntityRelationships(self.entityRelationshipsJsonDefinition, formDefinitionLoader.load(params.formName)).determineEntitiesAndRelations();
         }
         //TODO: if entities if null, consider taking bind_type from params, or formName
         if (!enketo.hasValue(self.formDefinition)) {
@@ -55,7 +55,7 @@ enketo.FormDataController = function (entityRelationshipLoader, formDefinitionLo
         init(params);
         if (self.entityDefinitions.hasEntityDefinitions()) {
             formModelMapper.mapToEntityAndSave(self.entityDefinitions, data);
-            var baseEntityIdField = data.form.fields.filter(function (field) {
+            var baseEntityIdField = data.form.fields.filter(function(field) {
                 return field.source === data.form.bind_type + ".id";
             })[0];
             params.entityId = baseEntityIdField.value;

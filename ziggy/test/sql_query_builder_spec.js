@@ -14,7 +14,11 @@ describe("SQL query builder", function () {
                 "name": "name 1"
             }
         });
-        spyOn(formDataRepository, "queryUniqueResult").andReturn(expectedEntity);
+        var fetchedEntity = JSON.stringify({
+            "id": "id 1",
+            "name": "name 1"
+        });
+        spyOn(formDataRepository, "queryUniqueResult").andReturn(fetchedEntity);
         var entityTypes = new enketo.EntityDefinitions()
             .add(new enketo.EntityDef("entity"));
 

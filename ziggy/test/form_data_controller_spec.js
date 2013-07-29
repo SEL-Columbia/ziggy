@@ -16,7 +16,10 @@ describe("Form Data Controller", function () {
 
     it("should get form model for given form type when there is no instance id.", function () {
         var expectedFormModel = {};
-        var formDefinition = {};
+        var formDefinition = {
+            "form" : {
+            }
+        };
         var params = {
             "id": "id 1",
             "formName": "entity registration",
@@ -46,7 +49,10 @@ describe("Form Data Controller", function () {
                 "to": "mother.ec_id"
             }
         ];
-        var formDefinition = {};
+        var formDefinition = {
+            "form" : {
+            }
+        };
         var formModel = {form: {
             bind_type: "ec",
             fields: [
@@ -81,7 +87,10 @@ describe("Form Data Controller", function () {
                 "to": "mother.ec_id"
             }
         ];
-        var formDefinition = {};
+        var formDefinition = {
+            "form" : {
+            }
+        };
         var formModel = {form: {
             bind_type: "ec",
             fields: [
@@ -109,7 +118,10 @@ describe("Form Data Controller", function () {
 
     it("should not try to map and save entities when there is no entity defined.", function () {
         var entityRelationshipJSON = [];
-        var formDefinition = {};
+        var formDefinition = {
+            "form" : {
+            }
+        };
         var formModel = {};
         var params = {};
         spyOn(entityRelationshipLoader, 'load').andReturn(entityRelationshipJSON);
@@ -135,8 +147,11 @@ describe("Form Data Controller", function () {
                 "to": "mother.ec_id"
             }
         ];
-        var formDefinition = {};
         var formModel = {};
+        var formDefinition = {
+            "form" : {
+            }
+        };
         var params = {};
         spyOn(entityRelationshipLoader, 'load').andReturn(entityRelationshipJSON);
         spyOn(formDefinitionLoader, 'load').andReturn(formDefinition);
@@ -169,7 +184,10 @@ describe("Form Data Controller", function () {
                 "to": "mother.ec_id"
             }
         ];
-        var formDefinition = {};
+        var formDefinition = {
+            "form" : {
+            }
+        };
         var formModel = {};
         var params = {"instanceId": "instance id 1"};
         spyOn(entityRelationshipLoader, 'load').andReturn(entityRelationshipJSON);

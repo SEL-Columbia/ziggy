@@ -2,31 +2,37 @@ if (typeof enketo === "undefined" || !enketo) {
     var enketo = {};
 }
 
-enketo.EntityRelationships = function (jsonDefinition) {
+enketo.EntityRelationships = function(jsonDefinition, formDefinition) {
     "use strict";
 
-    var determineEntities = function () {
+    var determineEntities = function() {
         var entityDefinitions = new enketo.EntityDefinitions();
-        jsonDefinition.forEach(function (relation) {
-            var entity = entityDefinitions.findEntityDefinitionByType(relation.parent);
-            if (!enketo.hasValue(entity)) {
-                entityDefinitions.add(new enketo.EntityDef(relation.parent));
-            }
-            entity = entityDefinitions.findEntityDefinitionByType(relation.child);
-            if (!enketo.hasValue(entity)) {
-                entityDefinitions.add(new enketo.EntityDef(relation.child));
-            }
-        });
+        if (enketo.hasValue(jsonDefinition)) {
+            jsonDefinition.forEach(function(relation) {
+                var entity = entityDefinitions.findEntityDefinitionByType(relation.parent);
+                if (!enketo.hasValue(entity)) {
+                    entityDefinitions.add(new enketo.EntityDef(relation.parent));
+                }
+                entity = entityDefinitions.findEntityDefinitionByType(relation.child);
+                if (!enketo.hasValue(entity)) {
+                    entityDefinitions.add(new enketo.EntityDef(relation.child));
+                }
+            });
+        }
+
+        if (enketo.hasValue(formDefinition.form.bind_type) && !enketo.hasValue(entityDefinitions.findEntityDefinitionByType(formDefinition.form.bind_type))) {
+            entityDefinitions.add(new enketo.EntityDef(formDefinition.form.bind_type));
+        }
         return entityDefinitions;
     };
 
     return {
-        determineEntitiesAndRelations: function () {
-            if (!enketo.hasValue(jsonDefinition)) {
-                return new enketo.EntityDefinitions();
-            }
+        determineEntitiesAndRelations: function() {
             var entityDefinitions = determineEntities();
-            jsonDefinition.forEach(function (relation) {
+            if (!enketo.hasValue(jsonDefinition)) {
+                return entityDefinitions;
+            }
+            jsonDefinition.forEach(function(relation) {
                 var parentEntityDefinition = entityDefinitions.findEntityDefinitionByType(relation.parent);
                 if (!enketo.hasValue(parentEntityDefinition.relations)) {
                     parentEntityDefinition.removeAllRelations();

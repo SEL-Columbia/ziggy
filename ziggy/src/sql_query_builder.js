@@ -45,7 +45,9 @@ enketo.SQLQueryBuilder = function (formDataRepository) {
             var sql = "select * from {0} where id = '{1}'".format(baseEntityType, baseEntityId);
             var baseEntity = JSON.parse(formDataRepository.queryUniqueResult(sql));
             if (!enketo.hasValue(baseEntityDefinition.relations) || baseEntityDefinition.relations.length === 0) {
-                return baseEntity;
+                var entity = {};
+                entity[baseEntityType] = baseEntity;
+                return entity;
             }
             baseEntityDefinition.relations.forEach(function (relation) {
                 baseEntity[relation.type] = loadEntityObjectAndItsRelatives(entitiesDefinition, baseEntity, baseEntityType, relation);
