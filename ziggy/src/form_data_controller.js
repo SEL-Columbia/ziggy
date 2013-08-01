@@ -6,6 +6,7 @@ enketo.FormDataController = function (entityRelationshipLoader, formDefinitionLo
     "use strict";
 
     var self = this;
+    var defaultFormDataDefinitionVersion = "1";
 
     var init = function (params) {
         if (!enketo.hasValue(self.entityRelationshipsJsonDefinition)) {
@@ -32,7 +33,8 @@ enketo.FormDataController = function (entityRelationshipLoader, formDefinitionLo
             data = JSON.parse(data);
         }
         params = updateEntityAndParams(params, data);
-        if (enketo.hasValue(formDataRepository.saveFormSubmission(params, data))) {
+        var formSubmissionInstanceId = formDataRepository.saveFormSubmission(params, data, data.form_data_definition_version || defaultFormDataDefinitionVersion);
+        if (enketo.hasValue(formSubmissionInstanceId)) {
             submissionRouter.route(params.instanceId);
         }
     };
