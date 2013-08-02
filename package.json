@@ -13,5 +13,9 @@
     },
     "scripts": {
         "test": "grunt"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/modilabs/ziggy.git"
     }
 }
