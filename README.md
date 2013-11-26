@@ -1,6 +1,6 @@
 Ziggy
 =====
-[![Build Status](https://travis-ci.org/modilabs/ziggy.png)](https://travis-ci.org/modilabs/ziggy)
+[![Build Status](https://travis-ci.org/SEL-Columbia/ziggy.png)](https://travis-ci.org/SEL-Columbia/ziggy)
 
 Steps to setup Ziggy on your machine:
 ========================================
