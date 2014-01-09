@@ -8,10 +8,21 @@ module.exports = function (grunt) {
         },
         karma: {
             dev: {
-                configFile: 'ziggy/test/conf/karma.conf.js',
+                configFile: 'karma.conf.js',
                 runnerPort: 9999,
                 singleRun: true,
                 browsers: ['PhantomJS']
+            },
+            chrome: {
+                configFile: 'karma.conf.js',
+                runnerPort: 9999,
+                singleRun: true,
+                browsers: ['Chrome']
+            },
+            debug: {
+                configFile: 'karma.conf.js',
+                runnerPort: 9999,
+                browsers: ['Chrome']
             },
             release: {
                 configFile: 'ziggy/test/conf/karma-minified.conf.js',
@@ -26,16 +37,16 @@ module.exports = function (grunt) {
             },
             dist: {
                 src: [
-                    'ziggy/src/util.js',
+                    'ziggy/src/Util.js',
                     'ziggy/src/id_factory.js',
                     'ziggy/src/form_model_mapper.js',
                     'ziggy/src/entity_relationship_loader.js',
-                    'ziggy/src/entity.js',
+                    'ziggy/src/Entity.js',
                     'ziggy/src/entities.js',
-                    'ziggy/src/entity_definition.js',
-                    'ziggy/src/entity_definitions.js',
-                    'ziggy/src/relation_kind.js',
-                    'ziggy/src/entity_relationships.js',
+                    'ziggy/src/EntityDef.js',
+                    'ziggy/src/EntityDefinitions.js',
+                    'ziggy/src/RelationKind.js',
+                    'ziggy/src/EntityRelationships.js',
                     'ziggy/src/form_definition_loader.js',
                     'ziggy/src/sql_query_builder.js',
                     'ziggy/src/form_data_repository.js',

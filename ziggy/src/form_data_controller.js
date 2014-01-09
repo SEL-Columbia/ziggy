@@ -17,7 +17,8 @@ enketo.FormDataController = function (entityRelationshipLoader, formDefinitionLo
             self.formDefinition = formDefinitionLoader.load(params.formName);
         }
         if (!enketo.hasValue(self.entityDefinitions)) {
-            self.entityDefinitions = enketo.EntityRelationships(self.entityRelationshipsJsonDefinition, self.formDefinition).determineEntitiesAndRelations();
+            self.entityDefinitions = enketo.EntityRelationships()
+                .determineEntitiesAndRelations(self.entityRelationshipsJsonDefinition, self.formDefinition);
         }
     };
 
