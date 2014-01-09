@@ -1,11 +1,6 @@
-/*global formSubmissionRouter*/
-
-if (typeof enketo === "undefined" || !enketo) {
-    var enketo = {};
-}
-
-enketo.FormSubmissionRouter = function () {
+define(['formSubmissionRouter'], function (formSubmissionRouter) {
     "use strict";
+
     var submissionRouter;
     if (typeof formSubmissionRouter !== "undefined") {
         submissionRouter = formSubmissionRouter;
@@ -16,4 +11,4 @@ enketo.FormSubmissionRouter = function () {
             return submissionRouter.route(instanceId);
         }
     };
-};
+});
