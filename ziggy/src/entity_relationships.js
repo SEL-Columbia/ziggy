@@ -2,13 +2,13 @@ if (typeof enketo === "undefined" || !enketo) {
     var enketo = {};
 }
 
-enketo.EntityRelationships = function(jsonDefinition, formDefinition) {
+enketo.EntityRelationships = function (jsonDefinition, formDefinition) {
     "use strict";
 
-    var determineEntities = function() {
+    var determineEntities = function () {
         var entityDefinitions = new enketo.EntityDefinitions();
         if (enketo.hasValue(jsonDefinition)) {
-            jsonDefinition.forEach(function(relation) {
+            jsonDefinition.forEach(function (relation) {
                 var entity = entityDefinitions.findEntityDefinitionByType(relation.parent);
                 if (!enketo.hasValue(entity)) {
                     entityDefinitions.add(new enketo.EntityDef(relation.parent));
@@ -27,12 +27,12 @@ enketo.EntityRelationships = function(jsonDefinition, formDefinition) {
     };
 
     return {
-        determineEntitiesAndRelations: function() {
+        determineEntitiesAndRelations: function () {
             var entityDefinitions = determineEntities();
             if (!enketo.hasValue(jsonDefinition)) {
                 return entityDefinitions;
             }
-            jsonDefinition.forEach(function(relation) {
+            jsonDefinition.forEach(function (relation) {
                 var parentEntityDefinition = entityDefinitions.findEntityDefinitionByType(relation.parent);
                 if (!enketo.hasValue(parentEntityDefinition.relations)) {
                     parentEntityDefinition.removeAllRelations();
