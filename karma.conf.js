@@ -6,6 +6,7 @@ module.exports = function (config) {
 
             {pattern: 'ziggy/src/**/*.js', included: false},
             {pattern: 'ziggy/test/**/*.js', included: false},
+            {pattern: 'ziggy/stub/**/*.js', included: false},
             {pattern: 'node_modules/squirejs/src/*.js', included: false}
         ]
     });

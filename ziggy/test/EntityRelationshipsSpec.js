@@ -7,11 +7,6 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
             done();
         });
 
-        async.afterEach(function (done) {
-            injector.remove();
-            done();
-        });
-
         async.it("should identify all entities based on entity relationship", function (done) {
             injector
                 .require(['EntityRelationships', 'EntityDefinitions', 'EntityDef', 'RelationDef'],
@@ -456,6 +451,11 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
                     expect(JSON.stringify(entities)).toBe(JSON.stringify(expectedEntities));
                     done();
                 });
+        });
+
+        async.afterEach(function (done) {
+            injector.remove();
+            done();
         });
     });
 });

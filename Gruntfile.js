@@ -22,6 +22,7 @@ module.exports = function (grunt) {
             debug: {
                 configFile: 'karma.conf.js',
                 runnerPort: 9999,
+                autoWatch: true,
                 browsers: ['Chrome']
             },
             release: {
@@ -48,8 +49,8 @@ module.exports = function (grunt) {
                     'ziggy/src/RelationKind.js',
                     'ziggy/src/EntityRelationships.js',
                     'ziggy/src/form_definition_loader.js',
-                    'ziggy/src/sql_query_builder.js',
-                    'ziggy/src/form_data_repository.js',
+                    'ziggy/src/SqlQueryBuilder.js',
+                    'ziggy/src/FormDataRepository.js',
                     'ziggy/src/form_submission_router.js',
                     'ziggy/src/form_data_controller.js'
                 ],

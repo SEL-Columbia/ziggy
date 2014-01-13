@@ -1,10 +1,4 @@
-/*global formDataRepositoryContext*/
-
-if (typeof enketo === "undefined" || !enketo) {
-    var enketo = {};
-}
-
-enketo.FormDataRepository = function () {
+define(['formDataRepositoryContext'], function (formDataRepositoryContext) {
     "use strict";
 
     var repository;
@@ -29,4 +23,4 @@ enketo.FormDataRepository = function () {
             return repository.saveEntity(entityType, JSON.stringify(entity));
         }
     };
-};
+});

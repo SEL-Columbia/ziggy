@@ -12,11 +12,15 @@ requirejs.config({
     baseUrl: '/base/ziggy/src',
     paths: {
         'Squire': '../../node_modules/squirejs/src/Squire',
-        'AsyncSpec': '../test/lib/jasmine.async'
+        'AsyncSpec': '../test/lib/jasmine.async',
+        'formDataRepositoryContext': '../test/stub/formDataRepositoryContext'
     },
     shim: {
         'AsyncSpec': {
             exports: 'AsyncSpec'
+        },
+        'formDataRepositoryContext': {
+            exports: 'formDataRepositoryContext'
         }
     }
 });
