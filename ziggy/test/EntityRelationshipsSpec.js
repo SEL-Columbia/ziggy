@@ -1,5 +1,5 @@
 define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
-    describe("Entity Relationships: ", function () {
+    describe("Entity Relationships:", function () {
         var injector, async = new AsyncSpec(this);
 
         async.beforeEach(function (done) {

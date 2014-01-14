@@ -13,7 +13,8 @@ requirejs.config({
     paths: {
         'Squire': '../../node_modules/squirejs/src/Squire',
         'AsyncSpec': '../test/lib/jasmine.async',
-        'formDataRepositoryContext': '../test/stub/formDataRepositoryContext'
+        'formDataRepositoryContext': '../test/stub/formDataRepositoryContext',
+        'formSubmissionRouter': '../test/stub/formSubmissionRouter'
     },
     shim: {
         'AsyncSpec': {
@@ -21,6 +22,9 @@ requirejs.config({
         },
         'formDataRepositoryContext': {
             exports: 'formDataRepositoryContext'
+        },
+        'formSubmissionRouter': {
+            exports: 'formSubmissionRouter'
         }
     }
 });

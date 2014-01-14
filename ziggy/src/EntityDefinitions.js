@@ -1,4 +1,4 @@
-define(function () {
+define(['Util'], function (Util) {
     "use strict";
 
     var EntityDefinitions = function () {
@@ -27,12 +27,12 @@ define(function () {
         self.findPathToBaseEntityFromSubEntity = function (baseEntityType, entityType) {
             var currentEntityDefinition = self.findEntityDefinitionByType(entityType);
             var baseEntityRelation = currentEntityDefinition.findRelationByType(baseEntityType);
-            if (enketo.hasValue(baseEntityRelation)) {
+            if (Util.hasValue(baseEntityRelation)) {
                 return [baseEntityRelation.type, entityType];
             }
             for (var index = 0; index < currentEntityDefinition.relations.length; index++) {
                 var path = self.findPathToBaseEntityFromSubEntity(baseEntityType, currentEntityDefinition.relations[index].type);
-                if (enketo.hasValue(path)) {
+                if (Util.hasValue(path)) {
                     path.push(entityType);
                     return path;
                 }

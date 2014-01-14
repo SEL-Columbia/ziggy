@@ -39,20 +39,20 @@ module.exports = function (grunt) {
             dist: {
                 src: [
                     'ziggy/src/Util.js',
-                    'ziggy/src/id_factory.js',
-                    'ziggy/src/form_model_mapper.js',
-                    'ziggy/src/entity_relationship_loader.js',
+                    'ziggy/src/IdFactory.js',
+                    'ziggy/src/FormModelMapper.js',
+                    'ziggy/src/EntityRelationshipLoader.js',
                     'ziggy/src/Entity.js',
-                    'ziggy/src/entities.js',
+                    'ziggy/src/Entities.js',
                     'ziggy/src/EntityDef.js',
                     'ziggy/src/EntityDefinitions.js',
                     'ziggy/src/RelationKind.js',
                     'ziggy/src/EntityRelationships.js',
-                    'ziggy/src/form_definition_loader.js',
+                    'ziggy/src/FormDefinitionLoader.js',
                     'ziggy/src/SqlQueryBuilder.js',
                     'ziggy/src/FormDataRepository.js',
-                    'ziggy/src/form_submission_router.js',
-                    'ziggy/src/form_data_controller.js'
+                    'ziggy/src/FormSubmissionRouter.js',
+                    'ziggy/src/FormDataController.js'
                 ],
                 dest: 'output/ziggy.js'
             }

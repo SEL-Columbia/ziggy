@@ -1,5 +1,5 @@
 define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
-    describe("SQL query builder: ", function () {
+    describe("SQL query builder:", function () {
         var injector, async = new AsyncSpec(this);
 
         async.beforeEach(function (done) {
