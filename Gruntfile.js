@@ -26,7 +26,7 @@ module.exports = function (grunt) {
                 browsers: ['Chrome']
             },
             release: {
-                configFile: 'ziggy/test/conf/karma-minified.conf.js',
+                configFile: 'karma-minified.conf.js',
                 runnerPort: 9999,
                 singleRun: true,
                 browsers: ['PhantomJS']
@@ -74,6 +74,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
-    grunt.registerTask('default', ['clean', 'jshint', 'karma:dev', 'concat', 'uglify', 'karma:release']);
+    grunt.registerTask('default', ['clean', 'jshint', 'karma:dev']);
 
 };
