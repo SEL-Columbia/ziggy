@@ -16,7 +16,8 @@
         "karma-jasmine": "~0.1.5",
         "karma-requirejs": "~0.2.1",
         "karma-phantomjs-launcher": "~0.1",
-        "karma-chrome-launcher": "~0.1"
+        "karma-chrome-launcher": "~0.1",
+        "squirejs": "~0.1.0"
     },
     "scripts": {
         "test": "grunt"
