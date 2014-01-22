@@ -9,12 +9,12 @@ for (var file in window.__karma__.files) {
 
 requirejs.config({
     // Karma serves files from '/base'
-    baseUrl: '/base/ziggy/src',
     paths: {
-        'Squire': '../../node_modules/squirejs/src/Squire',
-        'AsyncSpec': '../test/lib/jasmine.async',
-        'formDataRepositoryContext': '../test/stub/formDataRepositoryContext',
-        'formSubmissionRouter': '../test/stub/formSubmissionRouter'
+        'ziggy': '/base/ziggy/src',
+        'Squire': '/base/node_modules/squirejs/src/Squire',
+        'AsyncSpec': '/base/ziggy/test/lib/jasmine.async',
+        'formDataRepositoryContext': '/base/ziggy/test/stub/formDataRepositoryContext',
+        'formSubmissionRouter': '/base/ziggy/test/stub/formSubmissionRouter'
     },
     shim: {
         'AsyncSpec': {

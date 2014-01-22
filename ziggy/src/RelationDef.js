@@ -1,4 +1,4 @@
-define(['Relation'], function (Relation) {
+define(['ziggy/Relation'], function (Relation) {
     "use strict";
 
     var RelationDef = function (type, kind, as, from, to) {

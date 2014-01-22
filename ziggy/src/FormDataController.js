@@ -1,5 +1,5 @@
-define(['EntityRelationshipLoader', 'FormDefinitionLoader', 'FormModelMapper', 'FormDataRepository',
-    'FormSubmissionRouter', 'EntityRelationships', 'Util'],
+define(['ziggy/EntityRelationshipLoader', 'ziggy/FormDefinitionLoader', 'ziggy/FormModelMapper', 'ziggy/FormDataRepository',
+    'ziggy/FormSubmissionRouter', 'ziggy/EntityRelationships', 'ziggy/Util'],
     function (EntityRelationshipLoader, FormDefinitionLoader, FormModelMapper, FormDataRepository, FormSubmissionRouter, EntityRelationships, Util) {
         "use strict";
 

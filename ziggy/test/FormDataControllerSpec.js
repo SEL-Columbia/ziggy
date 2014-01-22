@@ -15,8 +15,9 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
         async.beforeEach(function (done) {
             injector = new Squire();
             injector
-                .require(['EntityRelationshipLoader', 'FormDefinitionLoader', 'FormDataRepository', 'FormModelMapper',
-                'FormSubmissionRouter', 'FormDataController', 'EntityDefinitions', 'EntityRelationships'],
+                .require(['ziggy/EntityRelationshipLoader', 'ziggy/FormDefinitionLoader', 'ziggy/FormDataRepository',
+                'ziggy/FormModelMapper', 'ziggy/FormSubmissionRouter', 'ziggy/FormDataController', 'ziggy/EntityDefinitions', 
+                'ziggy/EntityRelationships'],
                 function (EntityRelationshipLoader, FormDefinitionLoader, FormDataRepository, FormModelMapper, FormSubmissionRouter, FormDataController, EntityDefinitions, EntityRelationships) {
                     entityRelationshipLoader = EntityRelationshipLoader;
                     formDefinitionLoader = FormDefinitionLoader;

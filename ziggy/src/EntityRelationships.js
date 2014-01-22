@@ -1,4 +1,5 @@
-define(['EntityDef', 'EntityDefinitions', 'RelationDef', 'RelationKind', 'Util'], function (EntityDef, EntityDefinitions, RelationDef, RelationKind, Util) {
+define(['ziggy/EntityDef', 'ziggy/EntityDefinitions', 'ziggy/RelationDef', 'ziggy/RelationKind', 'ziggy/Util'],
+    function (EntityDef, EntityDefinitions, RelationDef, RelationKind, Util) {
     "use strict";
 
     var determineEntities = function (jsonDefinition, formDefinition) {

@@ -1,4 +1,4 @@
-define(['IdFactoryBridge'], function (IdFactoryBridge) {
+define(['ziggy/IdFactoryBridge'], function (IdFactoryBridge) {
     "use strict";
     return{
         generateIdFor: function (entityType) {

@@ -1,4 +1,4 @@
-define(['Entity'], function (Entity) {
+define(['ziggy/Entity'], function (Entity) {
     "use strict";
 
     var EntityDef = function (type) {

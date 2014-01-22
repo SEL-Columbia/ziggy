@@ -9,7 +9,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it("should identify all entities based on entity relationship", function (done) {
             injector
-                .require(['EntityRelationships', 'EntityDefinitions', 'EntityDef', 'RelationDef'],
+                .require(['ziggy/EntityRelationships', 'ziggy/EntityDefinitions', 'ziggy/EntityDef', 'ziggy/RelationDef'],
                 function (EntityRelationships, EntityDefinitions, EntityDef, RelationDef) {
                     var entityRelationshipJSONDefinition = [
                         {
@@ -118,7 +118,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it("should identify all entities based on entity relationship when there is a four level hierarchy", function (done) {
             injector
-                .require(['EntityRelationships', 'EntityDefinitions', 'EntityDef', 'RelationDef'],
+                .require(['ziggy/EntityRelationships', 'ziggy/EntityDefinitions', 'ziggy/EntityDef', 'ziggy/RelationDef'],
                 function (EntityRelationships, EntityDefinitions, EntityDef, RelationDef) {
                     var entityRelationshipJSONDefinition = [
                         {
@@ -227,7 +227,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it("should identify all entities based on entity relationship and form definition", function (done) {
             injector
-                .require(['EntityRelationships', 'EntityDefinitions', 'EntityDef', 'RelationDef'],
+                .require(['ziggy/EntityRelationships', 'ziggy/EntityDefinitions', 'ziggy/EntityDef', 'ziggy/RelationDef'],
                 function (EntityRelationships, EntityDefinitions, EntityDef, RelationDef) {
                     var entityRelationshipJSONDefinition = [
                         {
@@ -291,7 +291,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it("should not add entity from form definition if already added", function (done) {
             injector
-                .require(['EntityRelationships', 'EntityDefinitions', 'EntityDef', 'RelationDef'],
+                .require(['ziggy/EntityRelationships', 'ziggy/EntityDefinitions', 'ziggy/EntityDef', 'ziggy/RelationDef'],
                 function (EntityRelationships, EntityDefinitions, EntityDef, RelationDef) {
                     var entityRelationshipJSONDefinition = [
                         {
@@ -354,7 +354,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it("should not add entity from form definition if already added", function (done) {
             injector
-                .require(['EntityRelationships', 'EntityDefinitions', 'EntityDef', 'RelationDef'],
+                .require(['ziggy/EntityRelationships', 'ziggy/EntityDefinitions', 'ziggy/EntityDef', 'ziggy/RelationDef'],
                 function (EntityRelationships, EntityDefinitions, EntityDef, RelationDef) {
                     var entityRelationshipJSONDefinition = [
                         {
@@ -417,7 +417,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it("should add entity from form definition when there are no entities in entity relationship JSON", function (done) {
             injector
-                .require(['EntityRelationships', 'EntityDefinitions', 'EntityDef'],
+                .require(['ziggy/EntityRelationships', 'ziggy/EntityDefinitions', 'ziggy/EntityDef'],
                 function (EntityRelationships, EntityDefinitions, EntityDef) {
                     var entityRelationshipJSONDefinition = null;
                     var formDefinition = {
@@ -437,7 +437,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it("should return empty entities list when there are no entities", function (done) {
             injector
-                .require(['EntityRelationships', 'EntityDefinitions'],
+                .require(['ziggy/EntityRelationships', 'ziggy/EntityDefinitions'],
                 function (EntityRelationships, EntityDefinitions) {
                     var entityRelationshipJSONDefinition = null;
                     var formDefinition = {

@@ -1,4 +1,4 @@
-define(['Util'], function (Util) {
+define(['ziggy/Util'], function (Util) {
     var Entities = function () {
         "use strict";
 

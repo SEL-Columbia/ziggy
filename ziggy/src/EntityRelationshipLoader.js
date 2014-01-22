@@ -5,6 +5,5 @@ define(function () {
         load: function () {
             return JSON.parse(ziggyFileLoader.loadAppData("entity_relationship.json"));
         }
-
     };
 });

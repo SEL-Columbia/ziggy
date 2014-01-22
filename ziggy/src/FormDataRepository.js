@@ -1,4 +1,4 @@
-define(['formDataRepositoryContext'], function (formDataRepositoryContext) {
+define(function () {
     "use strict";
 
     var repository;

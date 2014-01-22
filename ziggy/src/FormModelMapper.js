@@ -1,4 +1,5 @@
-define(['FormDataRepository', 'SqlQueryBuilder', 'IdFactory', 'Util', 'RelationKind', 'Entities'],
+define(['ziggy/FormDataRepository', 'ziggy/SqlQueryBuilder', 'ziggy/IdFactory', 'ziggy/Util', 'ziggy/RelationKind',
+    'ziggy/Entities'],
     function (FormDataRepository, sqlQueryBuilder, IdFactory, Util, RelationKind, Entities) {
         "use strict";
 

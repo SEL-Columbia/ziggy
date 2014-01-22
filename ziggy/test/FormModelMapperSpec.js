@@ -14,7 +14,8 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
         async.beforeEach(function (done) {
             injector = new Squire();
             injector
-                .require(['EntityDefinitions', 'EntityDef', 'RelationDef', 'FormDataRepository', 'SqlQueryBuilder', 'IdFactory', 'FormModelMapper'],
+                .require(['ziggy/EntityDefinitions', 'ziggy/EntityDef', 'ziggy/RelationDef', 'ziggy/FormDataRepository',
+                'ziggy/SqlQueryBuilder', 'ziggy/IdFactory', 'ziggy/FormModelMapper'],
                 function (EntityDefinitions, EntityDef, RelationDef, FormDataRepository, SqlQueryBuilder, IdFactory, FormModelMapper) {
                     savedFormInstance = JSON.stringify({
                         "form": {
@@ -95,7 +96,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it("should get form model for a given form type from the saved form instance when it exists", function (done) {
             injector
-                .require(['EntityDefinitions'],
+                .require(['ziggy/EntityDefinitions'],
                 function (EntityDefinitions) {
                     spyOn(formDataRepository, 'getFormInstanceByFormTypeAndId').andReturn(savedFormInstance);
                     var entities = EntityDefinitions.newInstance();
@@ -114,7 +115,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it("should get form model with empty field values for a given form type when there is no saved form instance and no entity", function (done) {
             injector
-                .require(['EntityDefinitions'],
+                .require(['ziggy/EntityDefinitions'],
                 function (EntityDefinitions) {
                     spyOn(formDataRepository, 'getFormInstanceByFormTypeAndId').andReturn(null);
                     var entities = EntityDefinitions.newInstance();
@@ -133,7 +134,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
         async.it("should get form model with empty field values for a given form type when there is no saved form instance, no entity but entity relationship exists",
             function (done) {
                 injector
-                    .require(['EntityDefinitions'],
+                    .require(['ziggy/EntityDefinitions'],
                     function (EntityDefinitions) {
                         var expectedFormDataDefinition = {
                             "form": {
@@ -175,7 +176,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
         async.it("should get form model with empty field values for a given form type when there is no saved form instance, only one entity",
             function (done) {
                 injector
-                    .require(['EntityDefinitions', 'EntityDef'],
+                    .require(['ziggy/EntityDefinitions', 'ziggy/EntityDef'],
                     function (EntityDefinitions, EntityDef) {
                         formDefinition = {
                             "form": {
@@ -253,7 +254,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it("should get form model with values loaded from an entity for a given form type when entity exists", function (done) {
             injector
-                .require(['EntityDefinitions'],
+                .require(['ziggy/EntityDefinitions'],
                 function (EntityDefinitions) {
                     var entityValues = {
                         entity: {
@@ -600,7 +601,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it("should not load values for fields not marked with shouldLoadValue as true", function (done) {
             injector
-                .require(['EntityDefinitions'],
+                .require(['ziggy/EntityDefinitions'],
                 function (EntityDefinitions) {
                     var entityValues = {
                         entity: {
@@ -1379,7 +1380,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
             async.it("should update fields from fieldOverrides map", function (done) {
                 injector
-                    .require(['EntityDefinitions'],
+                    .require(['ziggy/EntityDefinitions'],
                     function (EntityDefinitions) {
                         var entityValues = {
                             entity: {

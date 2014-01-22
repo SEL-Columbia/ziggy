@@ -1,4 +1,4 @@
-define(['formDataRepositoryContext'], function () {
+define(function () {
     "use strict";
     var idFactoryContext;
     if (typeof formDataRepositoryContext !== "undefined") {

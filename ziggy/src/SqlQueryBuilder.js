@@ -1,4 +1,4 @@
-define(['FormDataRepository', 'RelationKind', 'Util'], function (FormDataRepository, RelationKind, Util) {
+define(['ziggy/FormDataRepository', 'ziggy/RelationKind', 'ziggy/Util'], function (FormDataRepository, RelationKind, Util) {
     "use strict";
 
     var loadEntityObjectAndItsRelatives = function (entitiesDefinition, parentInstance, parentType, contextRelation) {

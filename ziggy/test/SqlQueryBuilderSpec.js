@@ -9,7 +9,7 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it("should load a simple entity without any relations", function (done) {
             injector
-                .require(['EntityDefinitions', 'EntityDef', 'FormDataRepository', 'SqlQueryBuilder'],
+                .require(['ziggy/EntityDefinitions', 'ziggy/EntityDef', 'ziggy/FormDataRepository', 'ziggy/SqlQueryBuilder'],
                 function (EntityDefinitions, EntityDef, FormDataRepository, SqlQueryBuilder) {
                     var expectedEntity = JSON.stringify({
                         "entity": {
@@ -33,7 +33,8 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it('should load entity with all its children', function (done) {
             injector
-                .require(['EntityDefinitions', 'EntityDef', 'RelationDef', 'FormDataRepository', 'SqlQueryBuilder'],
+                .require(['ziggy/EntityDefinitions', 'ziggy/EntityDef', 'ziggy/RelationDef', 'ziggy/FormDataRepository',
+                'ziggy/SqlQueryBuilder'],
                 function (EntityDefinitions, EntityDef, RelationDef, FormDataRepository, SqlQueryBuilder) {
                     var entitiesDefinition = EntityDefinitions.newInstance()
                         .add(EntityDef.newInstance(
@@ -126,7 +127,8 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
 
         async.it('should load entity with all its parent', function (done) {
             injector
-                .require(['EntityDefinitions', 'EntityDef', 'RelationDef', 'FormDataRepository', 'SqlQueryBuilder'],
+                .require(['ziggy/EntityDefinitions', 'ziggy/EntityDef', 'ziggy/RelationDef', 'ziggy/FormDataRepository',
+                'ziggy/SqlQueryBuilder'],
                 function (EntityDefinitions, EntityDef, RelationDef, FormDataRepository, SqlQueryBuilder) {
                     var entitiesDefinition = EntityDefinitions.newInstance()
                         .add(EntityDef.newInstance(
@@ -198,9 +200,11 @@ define(['Squire', 'AsyncSpec'], function (Squire, AsyncSpec) {
                 });
 
         });
+
         async.it('should load entity with both its parents and children', function (done) {
             injector
-                .require(['EntityDefinitions', 'EntityDef', 'RelationDef', 'FormDataRepository', 'SqlQueryBuilder'],
+                .require(['ziggy/EntityDefinitions', 'ziggy/EntityDef', 'ziggy/RelationDef', 'ziggy/FormDataRepository',
+                'ziggy/SqlQueryBuilder'],
                 function (EntityDefinitions, EntityDef, RelationDef, FormDataRepository, SqlQueryBuilder) {
                     var entitiesDefinition = EntityDefinitions.newInstance()
                         .add(EntityDef.newInstance(
