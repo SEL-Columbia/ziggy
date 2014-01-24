@@ -1,4 +1,4 @@
-define(function (formSubmissionRouter) {
+define(function () {
     "use strict";
 
     var submissionRouter;
