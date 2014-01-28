@@ -65,6 +65,19 @@ module.exports = function (grunt) {
                 src: 'output/ziggy.js',
                 dest: 'output/ziggy.min.js'
             }
+        },
+        requirejs: {
+            compile: {
+                options: {
+                    name: '../../main',
+                    baseUrl: 'ziggy/src',
+                    mainConfigFile: "main.js",
+                    findNestedDependencies: true,
+                    include: ['../../node_modules/requirejs/require.js'],
+                    out: "output/ziggy.min.js",
+                    optimize: "uglify"
+                }
+            }
         }
     });
 
@@ -73,7 +86,8 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-karma');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-requirejs');
 
-    grunt.registerTask('default', ['clean', 'jshint', 'karma:dev']);
+    grunt.registerTask('default', ['clean', 'jshint', 'karma:dev', 'requirejs']);
 
 };

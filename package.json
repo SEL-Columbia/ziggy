@@ -17,7 +17,8 @@
         "karma-requirejs": "~0.2.1",
         "karma-phantomjs-launcher": "~0.1",
         "karma-chrome-launcher": "~0.1",
-        "squirejs": "~0.1.0"
+        "squirejs": "~0.1.0",
+        "grunt-contrib-requirejs": "~0.4.1"
     },
     "scripts": {
         "test": "grunt"
