@@ -4,7 +4,7 @@ define(['ziggy/FormDataRepository', 'ziggy/RelationKind', 'ziggy/Util'], functio
     var loadEntityObjectAndItsRelatives = function (entitiesDefinition, parentInstance, parentType, contextRelation) {
         var baseEntity = entitiesDefinition.findEntityDefinitionByType(contextRelation.type);
         var column = contextRelation.from.split(".")[1];
-        var sql = "select * from {0} where {1} = '{2}'".format(contextRelation.type, contextRelation.to, parentInstance[column]);
+        var sql = "select * from " + contextRelation.type + " where " + contextRelation.to + " = '" + parentInstance[column] + "'";
         var baseInstance = JSON.parse(queryMethod(contextRelation)(sql));
 
         if (!Util.hasValue(baseInstance)) {
@@ -38,7 +38,7 @@ define(['ziggy/FormDataRepository', 'ziggy/RelationKind', 'ziggy/Util'], functio
         loadEntityHierarchy: function (entitiesDefinition, baseEntityType, baseEntityId) {
             var baseEntityDefinition = entitiesDefinition.findEntityDefinitionByType(baseEntityType);
             //TODO : Need to format the sql as per the data type
-            var sql = "select * from {0} where id = '{1}'".format(baseEntityType, baseEntityId);
+            var sql = "select * from " + baseEntityType + " where id = '" + baseEntityId + "'";
             var baseEntity = JSON.parse(FormDataRepository.queryUniqueResult(sql));
             if (!Util.hasValue(baseEntityDefinition.relations) || baseEntityDefinition.relations.length === 0) {
                 var entity = {};
